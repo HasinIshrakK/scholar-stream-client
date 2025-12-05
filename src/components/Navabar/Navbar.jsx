@@ -25,7 +25,7 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <Link to='/'>
-                    <p className="btn btn-ghost text-xl">ScholerStream</p>
+                    <p className="btn btn-ghost text-xl">ScholarStream</p>
                 </Link>
             </div>
             <div className="navbar-center hidden lg:flex">
@@ -35,7 +35,7 @@ const Navbar = () => {
             </div>
             <div className="navbar-end">
                 <Link className="btn">Login</Link>
-                <Link className="btn ml-2">Register</Link>
+                <Link className="btn ml-2 hidden sm:flex">Register</Link>
             </div>
         </div>
     );

@@ -1,13 +1,14 @@
 import React from 'react';
 import Navbar from '../components/Navabar/Navbar';
 import Footer from '../components/Footer/Footer';
+import { Outlet } from 'react-router';
 
 const RootLayout = () => {
     return (
         <>
             <Navbar />
-            <div className='m-6 md:mx-20'>
-                ScholerStream
+            <div className='mx-6 md:mx-20'>
+                <Outlet></Outlet>
             </div>
             <Footer />
         </>
