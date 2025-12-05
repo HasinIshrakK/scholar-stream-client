@@ -1,10 +1,16 @@
 import React from 'react';
+import Navbar from '../components/Navabar/Navbar';
+import Footer from '../components/Footer/Footer';
 
 const RootLayout = () => {
     return (
-        <div>
-            <h1>ScholerStream</h1>
-        </div>
+        <>
+            <Navbar />
+            <div className='m-6 md:mx-20'>
+                ScholerStream
+            </div>
+            <Footer />
+        </>
     );
 };
 
