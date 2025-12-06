@@ -5,7 +5,7 @@ const l = <>
     <Link to='/'>
         <li className='mr-2'>Home</li>
     </Link>
-    <Link>
+    <Link to='/all-scholarships'>
         <li className='mr-2'>All Scholarships</li>
     </Link>
 </>

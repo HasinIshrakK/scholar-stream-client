@@ -87,7 +87,7 @@ const Home = () => {
             <div className="max-w-5xl mx-auto px-6 mt-10">
                 <div className="flex items-center justify-between">
                     <h2 className="text-2xl font-semibold">Top Scholarships</h2>
-                    <Link to="/search" className="text-indigo-600 hover:underline">
+                    <Link to="/all-scholarships" className="text-indigo-600 hover:underline">
                         View All
                     </Link>
                 </div>
