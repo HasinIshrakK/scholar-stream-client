@@ -1,64 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
-
-// this is dummy data to use before implementing server side
-const dummyScholarships = [
-    {
-        _id: "1",
-        title: "National Talent Scholarship",
-        organization: "University Grants Commission",
-        fee: 0,
-        deadline: "2025-12-30",
-    },
-    {
-        _id: "2",
-        title: "Tech Innovators Scholarship",
-        organization: "BRAC University",
-        fee: 500,
-        deadline: "2025-11-15",
-    },
-    {
-        _id: "3",
-        title: "Merit-Based Scholarship",
-        organization: "Dhaka University",
-        fee: 0,
-        deadline: "2025-10-20",
-    },
-    {
-        _id: "4",
-        title: "STEM Excellence Award",
-        organization: "AIUB",
-        fee: 300,
-        deadline: "2025-12-05",
-    },
-    {
-        _id: "5",
-        title: "International Student Aid",
-        organization: "NSU",
-        fee: 0,
-        deadline: "2025-09-10",
-    },
-    {
-        _id: "6",
-        title: "Women in Tech Scholarship",
-        organization: "BUET",
-        fee: 200,
-        deadline: "2025-08-28",
-    },
-];
-
+import useAxios from "../../hooks/useAxios"
 
 const Home = () => {
 
     const [topScholarships, setTopScholarships] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const axiosInstance = useAxios();
+
     useEffect(() => {
-        setTimeout(() => {
-            setTopScholarships(dummyScholarships);
-            setLoading(false);
-        }, 400);
-    }, []);
+        const fetchScholarships = async () => {
+            try {
+                const response = await axiosInstance.get("/scholarships"); 
+                setTopScholarships(response.data);
+            } catch (err) {
+                console.error("Failed to fetch scholarships:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchScholarships();
+    }, [axiosInstance]);
 
     return (
         <div className="min-h-screen bg-gray-100 text-gray-900">
@@ -102,14 +66,14 @@ const Home = () => {
                     {!loading &&
                         topScholarships.map((s) => (
                             <div key={s._id} className="p-4 bg-white rounded-lg shadow border">
-                                <h3 className="font-semibold text-lg">{s.title}</h3>
-                                <p className="text-sm text-gray-600">{s.organization}</p>
+                                <h3 className="font-semibold text-lg">{s.scholarshipName}</h3>
+                                <p className="text-sm text-gray-600">{s.universityName}</p>
 
                                 <div className="mt-3 text-sm">
-                                    <p>Fee: {s.fee ? `৳${s.fee}` : "Free"}</p>
+                                    <p>Fee: {s.applicationFees ? `৳${s.applicationFees}` : "Free"}</p>
                                     <p>
                                         Deadline:{" "}
-                                        {s.deadline ? new Date(s.deadline).toLocaleDateString() : "—"}
+                                        {s.applicationDeadline ? new Date(s.applicationDeadline).toLocaleDateString() : "—"}
                                     </p>
                                 </div>
 

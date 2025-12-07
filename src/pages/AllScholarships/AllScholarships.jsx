@@ -1,45 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import ScholarshipCard from '../../components/Cards/ScholarshipCard';
 import SearchBar from '../../components/SearchBar';
-
-const dummyScholarships = [
-    {
-        _id: 1,
-        universityImage: "https://i.ibb.co/ZN8psJX/university1.jpg",
-        universityName: "Oxford University",
-        category: "Undergraduate",
-        location: "UK",
-        fee: 500,
-    },
-    {
-        _id: 2,
-        universityImage: "https://i.ibb.co/17rLhSw/university2.jpg",
-        universityName: "Harvard University",
-        category: "Masters",
-        location: "USA",
-        fee: 0,
-    },
-    {
-        _id: 3,
-        universityImage: "https://i.ibb.co/bzbRKP5/university3.jpg",
-        universityName: "University of Tokyo",
-        category: "PhD",
-        location: "Japan",
-        fee: 300,
-    },
-];
+import useAxios from "../../hooks/useAxios";
 
 const AllScholarships = () => {
-
     const [scholarships, setScholarships] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const axiosInstance = useAxios();
+
     useEffect(() => {
-        setTimeout(() => {
-            setScholarships(dummyScholarships);
-            setLoading(false);
-        }, 400);
-    }, []);
+        const fetchScholarships = async () => {
+            try {
+                const response = await axiosInstance.get("/scholarships");
+                setScholarships(Array.isArray(response.data) ? response.data : []);
+            } catch (err) {
+                console.error("Failed to fetch scholarships:", err);
+                setScholarships([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchScholarships();
+    }, [axiosInstance]);
 
     return (
         <div className="min-h-screen text-gray-900 px-4 md:px-10 lg:px-16 py-10">
@@ -77,7 +61,7 @@ const AllScholarships = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading &&
-                    Array.from({ length: dummyScholarships.length }).map((_, i) => (
+                    Array.from({ length: scholarships.length }).map((_, i) => (
                         <div key={i} className="h-64 bg-gray-200 animate-pulse rounded-md" />
                     ))
                 }

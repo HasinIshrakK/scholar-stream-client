@@ -13,21 +13,24 @@ const ScholarshipCard = ({ scholarship }) => {
             />
 
             {/* University Name */}
-            <h2 className="text-lg font-bold mb-1">{scholarship.universityName}</h2>
+            <h2 className="text-lg font-bold mb-1">{scholarship.scholarshipName}</h2>
+            <p className="text-gray-600">
+                <span className="font-semibold">{scholarship.universityName}</span> 
+            </p>
 
             {/* Category + Location */}
             <p className="text-sm text-gray-600">
-                <span className="font-semibold">Category:</span> {scholarship.category}
+                <span className="font-semibold">Category:</span> {scholarship.scholarshipCategory}
             </p>
 
             <p className="text-sm text-gray-600 mb-2">
-                <span className="font-semibold">Location:</span> {scholarship.location}
+                <span className="font-semibold">Location:</span> {scholarship.universityCity}, {scholarship.universityCountry}
             </p>
 
             {/* Application Fee */}
             <p className="text-sm mb-3">
                 <span className="font-semibold">Application Fee:</span>{" "}
-                {scholarship.fee > 0 ? `${scholarship.fee} BDT` : "Free"}
+                {scholarship.applicationFees > 0 ? `${scholarship.applicationFees} BDT` : "Free"}
             </p>
 
             {/* View Details Button */}
