@@ -9,6 +9,9 @@ import Error from "../components/Error/Error";
 import ScholarshipDetails from "../pages/ScholarshipDetails/ScholarshipDetails";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
+import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
+import MyApplications from "../pages/Dashboard/MyApplications/MyApplications";
+import MyReviews from "../pages/Dashboard/MyReviews/MyReviews";
 
 export const router = createBrowserRouter([
     {
@@ -72,10 +75,18 @@ export const router = createBrowserRouter([
                 index: true,
                 Component: DashboardHome,
             },
-            // {
-            //     path: "/all-scholarships",
-            //     Component: AllScholarships,
-            // },
+            {
+                path: "/dashboard/my-profile",
+                Component: MyProfile,
+            },
+            {
+                path: "/dashboard/my-applications",
+                Component: MyApplications,
+            },
+            {
+                path: "/dashboard/my-reviews",
+                Component: MyReviews,
+            },
             {
                 path: "/dashboard/*",
                 element: <div className="min-h-screen items-center flex flex-col">
