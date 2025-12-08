@@ -6,6 +6,7 @@ import Login from "../pages/Auth/Login/Login";
 import Register from "../pages/Auth/Register/Register";
 import Auth from "../pages/Auth/Auth";
 import Error from "../components/Error/Error";
+import ScholarshipDetails from "../pages/ScholarshipDetails/ScholarshipDetails";
 
 export const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
             {
                 path: "/all-scholarships",
                 Component: AllScholarships,
+            },
+            {
+                path: "/scholarships/:id",
+                Component: ScholarshipDetails,
             },
             // { path: "about", Component: About },
             {
