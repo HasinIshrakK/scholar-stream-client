@@ -5,21 +5,23 @@ import { AuthContext } from '../../../contexts/AuthContext';
 
 const Register = () => {
 
-    const { setUser, emailSignUp, googleSignIn } = useContext(AuthContext);
+    const { emailSignUp, googleSignIn } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
+
         const name = e.target.name.value;
         const photo = e.target.photo.value;
         const email = e.target.email.value;
         const password = e.target.password.value;
 
-        emailSignUp(email, password, name, photo);
+        const user = await emailSignUp(email, password, name, photo);
 
-        navigate('/')
+        if (user) navigate("/");
     };
+
 
     const google = async (e) => {
         e.preventDefault();

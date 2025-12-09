@@ -1,22 +1,26 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { AuthContext } from '../../../contexts/AuthContext';
 
 const Login = () => {
 
     const { emailSignIn, googleSignIn } = useContext(AuthContext);
 
-    const handleOnSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleOnSubmit = async (e) => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
 
-        emailSignIn(email, password);
+        await emailSignIn(email, password);
+        navigate('/');
     };
 
-    const google = (e) => {
+    const google = async (e) => {
         e.preventDefault();
-        googleSignIn();
+        await googleSignIn();
+        navigate('/');
     };
 
     return (

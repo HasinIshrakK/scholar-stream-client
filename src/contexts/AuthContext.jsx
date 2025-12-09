@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import auth from '../firebase/firebase.config';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2';
+import useAxios from '../hooks/useAxios';
 
 export const AuthContext = createContext();
 
@@ -10,15 +11,26 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const axiosInstance = useAxios();
+
 
     const emailSignUp = async (email, password, name, photo) => {
         const result = await createUserWithEmailAndPassword(auth, email, password);
 
         await updateProfile(result.user, {
             displayName: name,
-            photoURL: photo
+            photoURL: photo,
         });
 
+        await axiosInstance.post('/users', {
+            uid: result.user.uid,
+            name,
+            email,
+            photo,
+            role: "student"
+        });
+
+        setUser(result.user);
         return result.user;
     };
 
@@ -43,10 +55,21 @@ const AuthProvider = ({ children }) => {
 
     const provider = new GoogleAuthProvider();
 
-    const googleSignIn = () => {
-        return signInWithPopup(auth, provider).then(result => {
+    const googleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
             const user = result.user;
+
+            await axiosInstance.post('/users', {
+                uid: user.uid,
+                name: user.displayName,
+                email: user.email,
+                photo: user.photoURL,
+                role: "student",
+            });
+
             setUser(user);
+
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -55,12 +78,12 @@ const AuthProvider = ({ children }) => {
                 timer: 1500,
                 theme: 'auto'
             });
-        })
-            .catch((error) => {
-                console.log(error);
-            }
-            );
+
+        } catch (error) {
+            console.error("Google login error:", error);
+        }
     };
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
