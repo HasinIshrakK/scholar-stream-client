@@ -9,6 +9,22 @@ const ScholarshipDetails = () => {
 
     const [scholarship, setScholarship] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [reviews, setReviews] = useState(null);
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await axiosInstance.get(`/reviews/${id}`);
+                setReviews(response.data);
+            } catch (err) {
+                console.error("Failed to fetch reviews:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchReviews();
+    }, [axiosInstance]);
 
     useEffect(() => {
         const loadScholarship = async () => {
@@ -25,7 +41,6 @@ const ScholarshipDetails = () => {
         loadScholarship();
     }, [id]);
 
-
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -35,14 +50,16 @@ const ScholarshipDetails = () => {
     }
 
     if (!scholarship) {
-        return <div className="text-center py-20 text-red-600 text-xl">Scholarship Not Found</div>;
+        return (
+            <div className="text-center py-20 text-red-600 text-xl">
+                Scholarship Not Found
+            </div>
+        );
     }
-
 
     return (
         <div className="min-h-screen bg-gray-50 pb-20">
-
-            {/* HEADER IMAGE */}
+            {/* IMG */}
             <div className="w-full h-64 relative">
                 <img
                     src={scholarship.universityImage}
@@ -57,10 +74,8 @@ const ScholarshipDetails = () => {
             </div>
 
             <div className="max-w-5xl mx-auto px-4 mt-10">
-
                 <div className="bg-white shadow-xl rounded-xl p-6 border">
-
-                    {/* UNIVERSITY INFO */}
+                    {/* University Info */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                         <div>
                             <h2 className="text-2xl font-bold">{scholarship.universityName}</h2>
@@ -76,9 +91,8 @@ const ScholarshipDetails = () => {
                         )}
                     </div>
 
-                    {/* INFO GRID */}
+                    {/* Info Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 text-sm">
-
                         <div className="p-4 bg-gray-50 rounded-lg border">
                             <p className="text-gray-500">Subject Category</p>
                             <p className="font-semibold">{scholarship.subjectCategory}</p>
@@ -133,7 +147,17 @@ const ScholarshipDetails = () => {
                             <p className="text-gray-500">Posted By</p>
                             <p className="font-semibold">{scholarship.postedUserEmail}</p>
                         </div>
+                    </div>
 
+                    {/* Description & Coverage */}
+                    <div className="mt-6 p-4 bg-gray-50 rounded-lg border">
+                        <h3 className="text-xl font-bold mb-2">Scholarship Description</h3>
+                        <p>{scholarship.scholarshipDescription}</p>
+                    </div>
+
+                    <div className="mt-4 p-4 bg-gray-50 rounded-lg border">
+                        <h3 className="text-xl font-bold mb-2">Stipend / Coverage</h3>
+                        <p>{scholarship.stipendCoverage}</p>
                     </div>
 
                     <div className="mt-10 flex justify-end">
@@ -141,16 +165,53 @@ const ScholarshipDetails = () => {
                             Apply Now
                         </button>
                     </div>
-
                 </div>
 
+                {/* Reviews section */}
+                <div className="mt-10">
+                    <h3 className="text-2xl font-bold mb-6">Student Reviews</h3>
+                    {reviews.length === 0 ? (
+                        <p className="text-gray-500">No reviews yet.</p>
+                    ) : (
+                        <div className="space-y-4">
+                            {reviews.map((review) => (
+                                <div
+                                    key={review._id}
+                                    className="flex items-start gap-4 p-4 bg-white rounded-xl shadow border"
+                                >
+                                    <img
+                                        src={review.userImage}
+                                        alt={review.userName}
+                                        className="w-12 h-12 rounded-full object-cover"
+                                    />
+                                    <div>
+                                        <div className="flex items-center justify-between">
+                                            <h4 className="font-semibold">{review.userName}</h4>
+                                            <span className="text-gray-400 text-sm">
+                                                {new Date(review.reviewDate).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-1 mt-1">
+                                            {Array.from({ length: review.ratingPoint }).map((_, i) => (
+                                                <span key={i} className="text-yellow-400">★</span>
+                                            ))}
+                                            {Array.from({ length: 5 - review.ratingPoint }).map((_, i) => (
+                                                <span key={i} className="text-gray-300">★</span>
+                                            ))}
+                                        </div>
+                                        <p className="mt-2 text-gray-700">{review.reviewComment}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
 
                 <div className="mt-6">
                     <Link to="/all-scholarships" className="text-indigo-600 hover:underline">
                         ← Back to Scholarships
                     </Link>
                 </div>
-
             </div>
         </div>
     );
