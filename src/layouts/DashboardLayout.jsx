@@ -23,7 +23,7 @@ const DashboardLayout = () => {
                     <DashboardNavbar />
                 </nav>
                 {/* Page content here */}
-                <div className="min-h-screen bg-gray-100 text-gray-900">
+                <div className="min-h-screen bg-base-100 text-gray-900">
                     <Outlet />
                 </div>
                 <Footer></Footer>

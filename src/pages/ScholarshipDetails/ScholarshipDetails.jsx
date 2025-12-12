@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router";
 import useAxios from "../../hooks/useAxios";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const ScholarshipDetails = () => {
     const { id } = useParams();
     const axiosInstance = useAxios();
+    const { user, logout } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     const [scholarship, setScholarship] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [loading2, setLoading2] = useState(true);
     const [reviews, setReviews] = useState(null);
 
     useEffect(() => {
@@ -19,7 +24,7 @@ const ScholarshipDetails = () => {
             } catch (err) {
                 console.error("Failed to fetch reviews:", err);
             } finally {
-                setLoading(false);
+                setLoading2(false);
             }
         };
 
@@ -41,7 +46,28 @@ const ScholarshipDetails = () => {
         loadScholarship();
     }, [id]);
 
-    if (loading) {
+    const handleConfirmApply = async () => {
+        try {
+            const res = await axiosInstance.post("/applications", {
+                scholarshipId: scholarship._id,
+                scholarshipName: scholarship.scholarshipName,
+                universityName: scholarship.universityName,
+                userEmail: user.email,
+                status: "pending",
+                paymentStatus: "unpaid",
+                appliedDate: new Date(),
+            });
+
+            document.getElementById("apply_confirm_modal").close();
+
+            navigate("/dashboard/my-applications");
+        } catch (err) {
+            console.error("Failed to apply:", err);
+        }
+    };
+
+
+    if (loading || loading2) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
@@ -161,16 +187,72 @@ const ScholarshipDetails = () => {
                     </div>
 
                     <div className="mt-10 flex justify-end">
-                        <button className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">
+                        <button onClick={() => document.getElementById('apply_confirm_modal').showModal()}
+                            className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">
                             Apply Now
                         </button>
                     </div>
+
+                    {/* The modal for confirmation */}
+                    <dialog id="apply_confirm_modal" className="modal">
+                        <div className="modal-box rounded-xl p-6">
+
+                            <h3 className="text-2xl font-bold text-center text-indigo-600">
+                                Confirm Your Application
+                            </h3>
+
+                            <p className="text-gray-600 text-center mt-3">
+                                Are you sure you want to apply for the <br />
+                                <span className="font-semibold text-gray-800">
+                                    {scholarship.scholarshipName}
+                                </span> at
+                                <span className="font-semibold text-gray-800"> {scholarship.universityName}</span>?
+                            </p>
+
+                            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mt-4">
+                                <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
+                                    <li>
+                                        After confirming, you will be redirected to the
+                                        <strong> My Application </strong>page.
+                                    </li>
+                                    <li>
+                                        Your application will be created with status:
+                                        <strong> Pending</strong>.
+                                    </li>
+                                    <li>
+                                        You must complete the payment for your application to proceed.
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button
+                                    className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition"
+                                    onClick={() => document.getElementById("apply_confirm_modal").close()}
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+                                    onClick={handleConfirmApply}
+                                >
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
+
+                        <form method="dialog" className="modal-backdrop">
+                            <button>close</button>
+                        </form>
+                    </dialog>
+
                 </div>
 
                 {/* Reviews section */}
                 <div className="mt-10">
                     <h3 className="text-2xl font-bold mb-6">Student Reviews</h3>
-                    {reviews.length === 0 ? (
+                    {reviews?.length === 0 ? (
                         <p className="text-gray-500">No reviews yet.</p>
                     ) : (
                         <div className="space-y-4">
