@@ -137,21 +137,21 @@ const ScholarshipDetails = () => {
                         <div className="p-4 bg-gray-50 rounded-lg border">
                             <p className="text-gray-500">Tuition Fees</p>
                             <p className="font-semibold">
-                                {scholarship.tuitionFees ? `৳${scholarship.tuitionFees}` : "Free"}
+                                {scholarship.tuitionFees ? `$${scholarship.tuitionFees}` : "Free"}
                             </p>
                         </div>
 
                         <div className="p-4 bg-gray-50 rounded-lg border">
                             <p className="text-gray-500">Application Fee</p>
                             <p className="font-semibold">
-                                {scholarship.applicationFees ? `৳${scholarship.applicationFees}` : "Free"}
+                                {scholarship.applicationFees ? `$${scholarship.applicationFees}` : "Free"}
                             </p>
                         </div>
 
                         <div className="p-4 bg-gray-50 rounded-lg border">
                             <p className="text-gray-500">Service Charge</p>
                             <p className="font-semibold">
-                                {scholarship.serviceCharge ? `৳${scholarship.serviceCharge}` : "None"}
+                                {scholarship.serviceCharge ? `$${scholarship.serviceCharge}` : "None"}
                             </p>
                         </div>
 

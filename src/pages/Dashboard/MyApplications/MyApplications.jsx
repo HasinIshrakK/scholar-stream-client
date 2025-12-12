@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useAxios from "../../../hooks/useAxios";
 import { Link } from "react-router";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const MyApplications = () => {
     const axiosInstance = useAxios();
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchApplications = async () => {
@@ -33,6 +35,24 @@ const MyApplications = () => {
     if (applications.length === 0) {
         return <p className="text-center py-10 text-gray-500">You have not submitted any applications yet.</p>;
     }
+
+const handlePay = async (app) => {
+    try {
+        const res = await axiosInstance.post('/create-checkout-session', {
+            applicationFees: 50,
+            scholarshipName: app.scholarshipName,
+            userEmail: user.email || user.userEmail,
+            applicationId: app._id
+        });
+
+        window.location.href = res.data.url;
+
+    } catch (error) {
+        console.error("PAY ERROR:", error.response?.data || error);
+    }
+};
+
+
 
     return (
         <div className="overflow-x-auto mt-6">
@@ -81,7 +101,7 @@ const MyApplications = () => {
                                             ? "badge-error"
                                             : "badge-warning"
                                         } badge-sm`}
-                                         
+
                                 >
                                     {app.status}
                                 </span>

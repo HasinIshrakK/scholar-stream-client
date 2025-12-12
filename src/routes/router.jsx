@@ -12,6 +12,8 @@ import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
 import MyApplications from "../pages/Dashboard/MyApplications/MyApplications";
 import MyReviews from "../pages/Dashboard/MyReviews/MyReviews";
+import Success from "../pages/Dashboard/Payment/Success";
+import Cancel from "../pages/Dashboard/Payment/Cancel";
 
 export const router = createBrowserRouter([
     {
@@ -86,6 +88,14 @@ export const router = createBrowserRouter([
             {
                 path: "/dashboard/my-reviews",
                 Component: MyReviews,
+            },
+            {
+                path: "/dashboard/payment-success",
+                Component: Success,
+            },
+            {
+                path: "/dashboard/payment-cancelled",
+                Component: Cancel,
             },
             {
                 path: "/dashboard/*",

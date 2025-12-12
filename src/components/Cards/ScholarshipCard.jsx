@@ -30,7 +30,7 @@ const ScholarshipCard = ({ scholarship }) => {
             {/* Application Fee */}
             <p className="text-sm mb-3">
                 <span className="font-semibold">Application Fee:</span>{" "}
-                {scholarship.applicationFees > 0 ? `${scholarship.applicationFees} BDT` : "Free"}
+                {scholarship.applicationFees > 0 ? `${scholarship.applicationFees} USD` : "Free"}
             </p>
 
             {/* View Details Button */}

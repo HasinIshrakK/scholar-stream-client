@@ -70,7 +70,7 @@ const Home = () => {
                                 <p className="text-sm text-gray-600">{s.universityName}</p>
 
                                 <div className="mt-3 text-sm">
-                                    <p>Fee: {s.applicationFees ? `৳${s.applicationFees}` : "Free"}</p>
+                                    <p>Fee: {s.applicationFees ? `$${s.applicationFees}` : "Free"}</p>
                                     <p>
                                         Deadline:{" "}
                                         {s.applicationDeadline ? new Date(s.applicationDeadline).toLocaleDateString() : "—"}
