@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router';
 import DashboardNavbar from '../components/Navbar/DashboardNavbar';
 import Footer from '../components/Footer/Footer';
-import { MdOutlineReviews } from 'react-icons/md';
+import { MdOutlineReviews, MdReviews } from 'react-icons/md';
 import { TiDocumentText } from 'react-icons/ti';
 import { FaRegUser } from 'react-icons/fa';
 import { FiHome, FiSidebar } from 'react-icons/fi';
@@ -78,6 +78,17 @@ const DashboardLayout = () => {
                                         <MdOutlineReviews />
                                     </div>
                                     <span className="is-drawer-close:hidden">My Reviews</span>
+                                </button>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to='/dashboard/all-reviews'>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Reviews">
+                                    {/* All Reviews icon */}
+                                    <div className='text-2xl'>
+                                        <MdReviews />
+                                    </div>
+                                    <span className="is-drawer-close:hidden">All Reviews</span>
                                 </button>
                             </NavLink>
                         </li>
