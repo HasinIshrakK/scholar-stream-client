@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router";
 import useAxios from "../../hooks/useAxios";
 import { AuthContext } from "../../contexts/AuthContext";
+import Loader from "../../components/Loader";
 
 const ScholarshipDetails = () => {
     const { id } = useParams();
@@ -69,9 +70,7 @@ const ScholarshipDetails = () => {
 
     if (loading || loading2) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-            </div>
+            <Loader />
         );
     }
 

@@ -4,16 +4,18 @@ import styled from 'styled-components';
 const Loader = () => {
   return (
     <StyledWrapper>
-      <div className="loader">
-        <div className="square" id="sq1" />
-        <div className="square" id="sq2" />
-        <div className="square" id="sq3" />
-        <div className="square" id="sq4" />
-        <div className="square" id="sq5" />
-        <div className="square" id="sq6" />
-        <div className="square" id="sq7" />
-        <div className="square" id="sq8" />
-        <div className="square" id="sq9" />
+      <div className="min-h-screen items-center flex flex-col">
+        <div className="loader">
+          <div className="square" id="sq1" />
+          <div className="square" id="sq2" />
+          <div className="square" id="sq3" />
+          <div className="square" id="sq4" />
+          <div className="square" id="sq5" />
+          <div className="square" id="sq6" />
+          <div className="square" id="sq7" />
+          <div className="square" id="sq8" />
+          <div className="square" id="sq9" />
+        </div>
       </div>
     </StyledWrapper>
   );
