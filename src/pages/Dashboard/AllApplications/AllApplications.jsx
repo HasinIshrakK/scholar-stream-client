@@ -6,21 +6,19 @@ import { FaEdit } from "react-icons/fa";
 import Swal from "sweetalert2";
 import Loader from "../../../components/Loader";
 
-const MyApplications = () => {
+const AllApplications = () => {
     const axiosInstance = useAxios();
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [scholarship, setScholarship] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
-    const [reviewRating, setReviewRating] = useState({});
-    const [reviewComment, setReviewComment] = useState({});
+    const [feedback, setFeedback] = useState({});
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        if (!user?.email) return;
         const fetchApplications = async () => {
             try {
-                const response = await axiosInstance.get(`/applications?email=${user?.email}`);
+                const response = await axiosInstance.get('/applications');
                 setApplications(response.data);
             } catch (err) {
                 console.error("Failed to fetch applications:", err);
@@ -30,7 +28,7 @@ const MyApplications = () => {
         };
 
         fetchApplications();
-    }, [user?.email, axiosInstance]);
+    }, [axiosInstance]);
 
     if (loading) {
         return (
@@ -42,23 +40,7 @@ const MyApplications = () => {
         return <p className="text-center py-10 text-gray-500">You have not submitted any applications yet.</p>;
     }
 
-    const handlePay = async (app) => {
-        try {
-            const res = await axiosInstance.post('/create-checkout-session', {
-                applicationFees: 50,
-                scholarshipName: app.scholarshipName,
-                userEmail: user.email || user.userEmail,
-                applicationId: app._id
-            });
-
-            window.location.href = res.data.url;
-
-        } catch (error) {
-            console.error("PAY ERROR:", error.response?.data || error);
-        }
-    };
-
-    const handleDelete = async (app) => {
+    const handleCancel = async (app) => {
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -66,66 +48,52 @@ const MyApplications = () => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonText: "Yes, reject it!",
             theme: "auto",
         });
 
         if (!result.isConfirmed) return;
 
         try {
-            await axiosInstance.delete(`/applications/${app._id}`);
-            setApplications(prev =>
-                prev.filter(app => app._id !== app._id)
-            );
 
             Swal.fire({
-                title: "Deleted!",
-                text: "Your application has been deleted.",
+                title: "Rejected!",
+                text: "This application has been rejected.",
                 icon: "success",
                 theme: "auto",
             });
 
         } catch (error) {
-            console.error("DELETE ERROR:", error.response?.data || error);
+            console.error("CANCEL ERROR:", error.response?.data || error);
             Swal.fire({
                 title: "Error!",
-                text: "Failed to delete application. Please try again.",
+                text: "Failed to reject application. Please try again.",
                 icon: "error",
                 theme: "auto",
             });
         }
     };
 
-    const handleRevSubmit = async (app) => {
-        const rating = reviewRating[app._id];
-        const comment = reviewComment[app._id];
+    const handleFeedbackSubmit = async (app) => {
+        const comment = feedback[app._id];
 
-        if (!rating || !comment) {
-            return alert("Please select a rating and write a comment.");
+        if (!comment) {
+            return alert("Please write a feedback.");
         }
 
         try {
-            await axiosInstance.post("/reviews", {
-                scholarshipId: app._id,
-                scholarshipName: app.scholarshipName,
-                universityName: app.universityName,
-                userName: user.name || user.displayName || "Anonymous",
-                userEmail: user.email,
-                userImage: user.photoURL || "https://randomuser.me/api/portraits/men/66.jpg",
-                ratingPoint: parseInt(rating),
-                reviewComment: comment,
-                reviewDate: new Date().toISOString(),
-            });
+            // await axiosInstance.patch("/", {
 
-            alert("Review submitted successfully!");
-            document.getElementById(`review-${app._id}`).close();
+            // });
 
-            setReviewRating((prev) => ({ ...prev, [app._id]: "" }));
-            setReviewComment((prev) => ({ ...prev, [app._id]: "" }));
+            alert("Feedback submitted successfully!");
+            document.getElementById(`feedback-${app._id}`).close();
+
+            setFeedback((prev) => ({ ...prev, [app._id]: "" }));
 
         } catch (err) {
-            console.error("Review submission error:", err);
-            alert("Failed to submit review. Please try again.");
+            console.error("Feedback submission error:", err);
+            alert("Failed to submit feedback. Please try again.");
         }
     };
 
@@ -136,10 +104,13 @@ const MyApplications = () => {
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Scholarship</th>
-                        <th>University</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Applicant Name</th>
+                        <th>Applicant<br></br> Email</th>
+                        <th>University Name</th>
+                        <th>Application Feedback</th>
+                        <th>Application<br></br> Status</th>
+                        <th>Payment<br></br> Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -148,17 +119,19 @@ const MyApplications = () => {
                         <tr key={app._id}>
                             <th>{index + 1}</th>
 
-                            {/* Scholarship Info */}
+                            {/* Applicant Info */}
                             <td>
-                                <div className="flex items-center gap-3">
-                                    <div>
-                                        <div className="font-bold">{app.scholarshipName}</div>
-                                        <div className="text-sm opacity-50">{app.degree}</div>
-                                    </div>
+                                <div>
+                                    Name
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    email
                                 </div>
                             </td>
 
-                            {/* University */}
+                            {/* University Name */}
                             <td>
                                 {app.universityName}
                                 <br />
@@ -167,7 +140,14 @@ const MyApplications = () => {
                                 </span>
                             </td>
 
-                            {/* Status */}
+                            {/* Application Feedback */}
+                            <td>
+                                <div>
+                                    feedback
+                                </div>
+                            </td>
+
+                            {/* Application Status */}
                             <td>
                                 <span
                                     className={`badge ${app.status === "completed"
@@ -182,81 +162,76 @@ const MyApplications = () => {
                                 </span>
                             </td>
 
-                            {/* Action Buttons */}
-                            <td className="space-x-2 flex items-center">
-                                {app.status === "pending" && (
-                                    <Link to={`/dashboard/edit/${app.scholarshipId}`}>
-                                        <button className="text-primary text-2xl link">
-                                            <FaEdit />
-                                        </button>
-                                    </Link>
-                                )}
-                                <button onClick={async () => {
-                                    setModalOpen(true);
-                                    const res = await axiosInstance.get(`/scholarships/${app.scholarshipId}`);
-                                    setScholarship(res.data);
-                                    document.getElementById("details_modal").showModal();
-                                }}
-                                    className="btn btn-primary btn-outline btn-sm">
-                                    Details
-                                </button>
+                            {/* Payment Status */}
+                            <td>
+                                <span
+                                    className={`badge ${app.paymentStatus === "paid"
+                                        ? "badge-success"
+                                        : "badge-warning"
+                                        } badge-sm text-white`}
 
-                                {app.paymentStatus === "unpaid" && app.status === "pending" && (
-                                    <button className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700"
-                                        onClick={() => handlePay(app)}                                    >
-                                        Pay
+                                >
+                                    {app.paymentStatus}
+                                </span>
+                            </td>
+
+                            {/* Actions */}
+                            <td className="grid grid-cols-1 gap-2 items-center">
+                                <div className="lg:hidden">
+                                    <select defaultValue="Update Status" className="select select-primary select-sm">
+                                        <option disabled={true}>Application Status</option>
+                                        <option>Processing</option>
+                                        <option>Completed</option>
+                                    </select>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button onClick={async () => {
+                                        setModalOpen(true);
+                                        const res = await axiosInstance.get(`/scholarships/${app.scholarshipId}`);
+                                        setScholarship(res.data);
+                                        document.getElementById("details_modal").showModal();
+                                    }}
+                                        className="btn btn-primary btn-outline btn-sm">
+                                        Details
                                     </button>
-                                )}
-                                {app.status === "completed" && (
-                                    <>
-                                        <button
-                                            className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700"
-                                            onClick={() => document.getElementById(`review-${app._id}`).showModal()}>
-                                            Add a review
-                                        </button>
-                                        <dialog id={`review-${app._id}`} className="modal">
-                                            <form method="dialog" className="modal-box">
-                                                <h3 className="font-bold text-lg mb-4">Add a Review for {app.scholarshipName}</h3>
-
-                                                <div className="flex flex-col gap-3">
-                                                    <label className="font-semibold text-sm">Rating</label>
-                                                    <select className="select select-bordered w-full"
-                                                        value={reviewRating[app._id] || ""} onChange={(e) =>
-                                                            setReviewRating((prev) => ({ ...prev, [app._id]: e.target.value }))
-                                                        }>
-                                                        <option value="">Select rating</option>
-                                                        <option value="5">⭐⭐⭐⭐⭐</option>
-                                                        <option value="4">⭐⭐⭐⭐</option>
-                                                        <option value="3">⭐⭐⭐</option>
-                                                        <option value="2">⭐⭐</option>
-                                                        <option value="1">⭐</option>
-                                                    </select>
-
-                                                    <label className="font-semibold text-sm">Comment</label>
-                                                    <textarea
-                                                        className="textarea textarea-bordered w-full" rows={4}
-                                                        placeholder="Write your review..." value={reviewComment[app._id] || ""}
-                                                        onChange={(e) =>
-                                                            setReviewComment((prev) => ({ ...prev, [app._id]: e.target.value }))} />
-                                                </div>
-
-                                                <div className="modal-action">
-                                                    <button type="button"
-                                                        className="btn btn-primary" onClick={() => handleRevSubmit(app)}>
-                                                        Submit
-                                                    </button>
-                                                    <button className="btn">Cancel</button>
-                                                </div>
-                                            </form>
-                                        </dialog>
-                                    </>
-                                )}
-                                {app.status === "pending" && (
+                                    <select defaultValue="Update Status" className="select select-primary select-sm hidden lg:block">
+                                        <option disabled={true}>Application Status</option>
+                                        <option>Processing</option>
+                                        <option>Completed</option>
+                                    </select>
+                                    <button
+                                        className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700"
+                                        onClick={() => document.getElementById(`review-${app._id}`).showModal()}>
+                                        Give a feedback
+                                    </button>
                                     <button className="btn btn-sm bg-red-500 text-white"
-                                        onClick={() => handleDelete(app)}                                    >
-                                        Delete
+                                        onClick={() => handleCancel(app)}                                    >
+                                        Cancel
                                     </button>
-                                )}
+                                </div>
+                                <dialog id={`review-${app._id}`} className="modal">
+                                    <form method="dialog" className="modal-box">
+                                        <h3 className="font-bold text-lg mb-4">Write a Feedback for</h3>
+
+                                        <div className="flex flex-col gap-3">
+
+                                            <label className="font-semibold text-sm">Feedback</label>
+                                            <textarea
+                                                className="textarea textarea-bordered w-full" rows={4}
+                                                placeholder="Write your feedback..." value={feedback[app._id] || ""}
+                                                onChange={(e) =>
+                                                    setFeedback((prev) => ({ ...prev, [app._id]: e.target.value }))} />
+                                        </div>
+
+                                        <div className="modal-action">
+                                            <button type="button"
+                                                className="btn btn-primary" onClick={() => handleFeedbackSubmit(app)}>
+                                                Submit
+                                            </button>
+                                            <button className="btn">Cancel</button>
+                                        </div>
+                                    </form>
+                                </dialog>
 
                                 <dialog id="details_modal" className="modal">
                                     <div className="modal-box max-w-3xl">
@@ -351,4 +326,4 @@ const MyApplications = () => {
     );
 };
 
-export default MyApplications;
+export default AllApplications;

@@ -16,6 +16,7 @@ import Success from "../pages/Dashboard/Payment/Success";
 import Cancel from "../pages/Dashboard/Payment/Cancel";
 import EditApplication from "../pages/Dashboard/MyApplications/EditApplication";
 import AllReviews from "../pages/Dashboard/AllReviews/AllReviews";
+import AllApplications from "../pages/Dashboard/AllApplications/AllApplications";
 
 export const router = createBrowserRouter([
     {
@@ -93,6 +94,10 @@ export const router = createBrowserRouter([
             },
 
 
+            {
+                path: "/dashboard/all-applications",
+                Component: AllApplications,
+            },
             {
                 path: "/dashboard/all-reviews",
                 Component: AllReviews,

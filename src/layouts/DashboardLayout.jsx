@@ -6,6 +6,7 @@ import { MdOutlineReviews, MdReviews } from 'react-icons/md';
 import { TiDocumentText } from 'react-icons/ti';
 import { FaRegUser } from 'react-icons/fa';
 import { FiHome, FiSidebar } from 'react-icons/fi';
+import { IoDocumentLock } from 'react-icons/io5';
 
 const DashboardLayout = () => {
     return (
@@ -89,6 +90,17 @@ const DashboardLayout = () => {
                                         <MdReviews />
                                     </div>
                                     <span className="is-drawer-close:hidden">All Reviews</span>
+                                </button>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to='/dashboard/all-applications'>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Applications">
+                                    {/* All Applications icon */}
+                                    <div className='text-2xl'>
+                                        <IoDocumentLock />
+                                    </div>
+                                    <span className="is-drawer-close:hidden">All Applications</span>
                                 </button>
                             </NavLink>
                         </li>
