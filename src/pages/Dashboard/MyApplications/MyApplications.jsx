@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import useAxios from "../../../hooks/useAxios";
 import { Link } from "react-router";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { FaEdit } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const MyApplications = () => {
     const axiosInstance = useAxios();
@@ -36,23 +38,59 @@ const MyApplications = () => {
         return <p className="text-center py-10 text-gray-500">You have not submitted any applications yet.</p>;
     }
 
-const handlePay = async (app) => {
-    try {
-        const res = await axiosInstance.post('/create-checkout-session', {
-            applicationFees: 50,
-            scholarshipName: app.scholarshipName,
-            userEmail: user.email || user.userEmail,
-            applicationId: app._id
+    const handlePay = async (app) => {
+        try {
+            const res = await axiosInstance.post('/create-checkout-session', {
+                applicationFees: 50,
+                scholarshipName: app.scholarshipName,
+                userEmail: user.email || user.userEmail,
+                applicationId: app._id
+            });
+
+            window.location.href = res.data.url;
+
+        } catch (error) {
+            console.error("PAY ERROR:", error.response?.data || error);
+        }
+    };
+
+    const handleDelete = async (app) => {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            theme: "auto",
         });
 
-        window.location.href = res.data.url;
+        if (!result.isConfirmed) return;
 
-    } catch (error) {
-        console.error("PAY ERROR:", error.response?.data || error);
-    }
-};
+        try {
+            await axiosInstance.delete(`/applications/${app._id}`);
+            setApplications(prev =>
+                prev.filter(application => application._id !== app._id)
+            );
 
+            Swal.fire({
+                title: "Deleted!",
+                text: "Your application has been deleted.",
+                icon: "success",
+                theme: "auto",
+            });
 
+        } catch (error) {
+            console.error("DELETE ERROR:", error.response?.data || error);
+            Swal.fire({
+                title: "Error!",
+                text: "Failed to delete application. Please try again.",
+                icon: "error",
+                theme: "auto",
+            });
+        }
+    };
 
     return (
         <div className="overflow-x-auto mt-6">
@@ -109,19 +147,26 @@ const handlePay = async (app) => {
 
                             {/* Action Buttons */}
                             <td className="space-x-2 flex items-center">
-                                {app.paymentStatus === "unpaid" && (
-                                    <button
-                                        className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700"
-                                        onClick={() => handlePay(app)}
-                                    >
-                                        Pay
+                                <Link to={`/dashboard/edit/${app.scholarshipId}`}>
+                                    <button className="text-primary text-2xl link">
+                                        <FaEdit />
                                     </button>
-                                )}
+                                </Link>
                                 <Link to={`/scholarships/${app.scholarshipId}`}>
                                     <button className="btn btn-primary btn-outline btn-sm"                                >
                                         Details
                                     </button>
                                 </Link>
+                                {app.paymentStatus === "unpaid" && (
+                                    <button className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700"
+                                        onClick={() => handlePay(app)}                                    >
+                                        Pay
+                                    </button>
+                                )}
+                                <button className="btn btn-sm bg-red-500 text-white"
+                                    onClick={() => handleDelete(app)}                                    >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     ))}

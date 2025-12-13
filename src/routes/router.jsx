@@ -14,6 +14,7 @@ import MyApplications from "../pages/Dashboard/MyApplications/MyApplications";
 import MyReviews from "../pages/Dashboard/MyReviews/MyReviews";
 import Success from "../pages/Dashboard/Payment/Success";
 import Cancel from "../pages/Dashboard/Payment/Cancel";
+import EditApplication from "../pages/Dashboard/MyApplications/EditApplication";
 
 export const router = createBrowserRouter([
     {
@@ -89,6 +90,14 @@ export const router = createBrowserRouter([
                 path: "/dashboard/my-reviews",
                 Component: MyReviews,
             },
+           
+           
+            {
+                path: "/dashboard/edit/:id",
+                Component: EditApplication,
+            },
+
+
             {
                 path: "/dashboard/payment-success",
                 Component: Success,
