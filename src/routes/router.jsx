@@ -17,6 +17,9 @@ import Cancel from "../pages/Dashboard/Payment/Cancel";
 import EditApplication from "../pages/Dashboard/MyApplications/EditApplication";
 import AllReviews from "../pages/Dashboard/AllReviews/AllReviews";
 import AllApplications from "../pages/Dashboard/AllApplications/AllApplications";
+import AddScholarship from "../pages/Dashboard/AddScholarship/AddScholarship";
+import ManageScholarships from "../pages/Dashboard/ManageScholarships/ManageScholarships";
+import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
 
 export const router = createBrowserRouter([
     {
@@ -93,7 +96,7 @@ export const router = createBrowserRouter([
                 Component: MyReviews,
             },
 
-
+            // moderator routes
             {
                 path: "/dashboard/all-applications",
                 Component: AllApplications,
@@ -103,12 +106,27 @@ export const router = createBrowserRouter([
                 Component: AllReviews,
             },
 
+            // dummy
             {
                 path: "/dashboard/edit/:id",
                 Component: EditApplication,
             },
 
+            // admin routes
+            {
+                path: "/dashboard/add-scholarship",
+                Component: AddScholarship,
+            },
+            {
+                path: "/dashboard/manage-scholarships",
+                Component: ManageScholarships,
+            },
+            {
+                path: "/dashboard/manage-users",
+                Component: ManageUsers,
+            },
 
+            // payment routes
             {
                 path: "/dashboard/payment-success",
                 Component: Success,

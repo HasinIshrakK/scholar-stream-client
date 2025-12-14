@@ -7,6 +7,9 @@ import { TiDocumentText } from 'react-icons/ti';
 import { FaRegUser } from 'react-icons/fa';
 import { FiHome, FiSidebar } from 'react-icons/fi';
 import { IoDocumentLock } from 'react-icons/io5';
+import { GrDocumentConfig } from 'react-icons/gr';
+import { HiOutlineDocumentPlus } from 'react-icons/hi2';
+import { RiUserSettingsLine } from 'react-icons/ri';
 
 const DashboardLayout = () => {
     return (
@@ -49,6 +52,8 @@ const DashboardLayout = () => {
                         </li>
 
                         {/* List item */}
+
+                        {/* Student */}
                         <li>
                             <NavLink to='/dashboard/my-profile'>
                                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="My Profile">
@@ -82,6 +87,7 @@ const DashboardLayout = () => {
                                 </button>
                             </NavLink>
                         </li>
+                        {/* Moderator */}
                         <li>
                             <NavLink to='/dashboard/all-applications'>
                                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Applications">
@@ -101,6 +107,40 @@ const DashboardLayout = () => {
                                         <MdReviews />
                                     </div>
                                     <span className="is-drawer-close:hidden">All Reviews</span>
+                                </button>
+                            </NavLink>
+                        </li>
+                        {/* Admin */}
+                        <li>
+                            <NavLink to='/dashboard/add-scholarship'>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Add Scholarship">
+                                    {/* Add scholarship icon */}
+                                    <div className='text-2xl text-primary'>
+                                        <HiOutlineDocumentPlus />
+                                    </div>
+                                    <span className="is-drawer-close:hidden">Add Scholarship</span>
+                                </button>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to='/dashboard/manage-scholarships'>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Manage Scholarships">
+                                    {/* Manage scholarships icon */}
+                                    <div className='text-2xl text-primary'>
+                                        <GrDocumentConfig />
+                                    </div>
+                                    <span className="is-drawer-close:hidden">Manage Scholarships</span>
+                                </button>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to='/dashboard/manage-users'>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Manage Users">
+                                    {/* Manage users icon */}
+                                    <div className='text-2xl text-primary'>
+                                        <RiUserSettingsLine />
+                                    </div>
+                                    <span className="is-drawer-close:hidden">Manage Users</span>
                                 </button>
                             </NavLink>
                         </li>

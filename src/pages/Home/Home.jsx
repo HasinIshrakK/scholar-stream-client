@@ -43,7 +43,7 @@ const Home = () => {
                     </motion.p>
 
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                        <Link to="/search">
+                        <Link to="/">
                             <button className="btn mt-6 px-6 py-3 bg-white text-indigo-700 rounded-lg font-semibold shadow">
                                 Search Scholarships
                             </button>

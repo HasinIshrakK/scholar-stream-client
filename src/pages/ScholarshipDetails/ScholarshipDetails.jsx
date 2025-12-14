@@ -8,7 +8,7 @@ import Loader from "../../components/Loader";
 const ScholarshipDetails = () => {
     const { id } = useParams();
     const axiosInstance = useAxios();
-    const { user, logout } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     const navigate = useNavigate();
 

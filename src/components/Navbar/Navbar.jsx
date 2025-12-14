@@ -9,6 +9,9 @@ const l = <>
     <Link to='/all-scholarships'>
         <li className='mr-2'>All Scholarships</li>
     </Link>
+    <Link to='/dashboard'>
+        <li className='mr-2'>Dashboard</li>
+    </Link>
 </>
 
 const Navbar = () => {
