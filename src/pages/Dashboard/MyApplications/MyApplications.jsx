@@ -14,6 +14,7 @@ const MyApplications = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [reviewRating, setReviewRating] = useState({});
     const [reviewComment, setReviewComment] = useState({});
+    const [selectedApp, setSelectedApp] = useState(null);
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
@@ -170,7 +171,7 @@ const MyApplications = () => {
                             {/* Status */}
                             <td>
                                 <span
-                                    className={`badge ${app.status === "completed"
+                                    className={`badge capitalize ${app.status === "completed"
                                         ? "badge-success"
                                         : app.status === "rejected"
                                             ? "badge-error"
@@ -191,13 +192,13 @@ const MyApplications = () => {
                                         </button>
                                     </Link>
                                 )}
-                                <button onClick={async () => {
-                                    setModalOpen(true);
-                                    const res = await axiosInstance.get(`/scholarships/${app.scholarshipId}`);
-                                    setScholarship(res.data);
-                                    document.getElementById("details_modal").showModal();
-                                }}
-                                    className="btn btn-primary btn-outline btn-sm">
+                                <button className="btn btn-primary btn-outline btn-sm"
+                                    onClick={async () => {
+                                        setSelectedApp(app);
+                                        const res = await axiosInstance.get(`/scholarships/${app.scholarshipId}`);
+                                        setScholarship(res.data);
+                                        document.getElementById("details_modal").showModal();
+                                    }}>
                                     Details
                                 </button>
 
@@ -302,25 +303,25 @@ const MyApplications = () => {
 
                                                     <div>
                                                         <p className="text-gray-500">Payment Status</p>
-                                                        <p className="font-semibold capitalize">{app.paymentStatus}</p>
+                                                        <p className="font-semibold capitalize">{selectedApp?.paymentStatus}</p>
                                                     </div>
 
                                                     <div>
                                                         <p className="text-gray-500">Application Status</p>
-                                                        <p className="font-semibold capitalize">{app.status}</p>
+                                                        <p className="font-semibold capitalize">{selectedApp?.status}</p>
                                                     </div>
 
                                                     <div className="sm:col-span-2">
                                                         <p className="text-gray-500">Moderator Feedback</p>
                                                         <p className="font-semibold">
-                                                            {scholarship.feedback || "No feedback yet"}
+                                                            {selectedApp.feedback || "No feedback yet"}
                                                         </p>
                                                     </div>
 
                                                     <div>
                                                         <p className="text-gray-500">Applied On</p>
                                                         <p className="font-semibold">
-                                                            {new Date(app.appliedDate).toLocaleDateString()}
+                                                            {new Date(selectedApp?.appliedDate).toLocaleDateString()}
                                                         </p>
                                                     </div>
 
@@ -340,7 +341,6 @@ const MyApplications = () => {
                                         </div>
                                     </div>
                                 </dialog>
-
                             </td>
                         </tr>
                     ))}

@@ -53,6 +53,7 @@ const ScholarshipDetails = () => {
                 scholarshipId: scholarship._id,
                 scholarshipName: scholarship.scholarshipName,
                 universityName: scholarship.universityName,
+                userName: user.displayName,
                 userEmail: user.email,
                 status: "pending",
                 paymentStatus: "unpaid",

@@ -58,7 +58,7 @@ const AllReviews = () => {
 
             Swal.fire({
                 title: "Deleted!",
-                text: "Your review has been deleted.",
+                text: "This review has been deleted.",
                 icon: "success",
                 theme: "auto",
             });
