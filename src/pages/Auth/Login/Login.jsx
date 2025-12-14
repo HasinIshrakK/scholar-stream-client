@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { AuthContext } from '../../../contexts/AuthContext';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
 
     const { emailSignIn, googleSignIn } = useContext(AuthContext);
 
     const navigate = useNavigate();
+
+    const [type, setType] = useState(true);
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
@@ -21,6 +24,11 @@ const Login = () => {
         e.preventDefault();
         await googleSignIn();
         navigate('/');
+    };
+
+    const typeToggle = (e) => {
+        e.preventDefault();
+        setType(!type);
     };
 
     return (
@@ -39,7 +47,16 @@ const Login = () => {
                                 <label className="label">Email</label>
                                 <input name='email' type="email" className="input" placeholder="Email" />
                                 <label className="label">Password</label>
-                                <input name='password' type="password" className="input" placeholder="Password" />
+                                <div className='relative'>
+                                    <input required type={`${type ? 'password' : 'text'}`} name='password' className="input" placeholder="Password" />
+                                    <button className="absolute inset-y-0 right-6 text-xl text-gray-500" onClick={typeToggle}>
+                                        {type ?
+                                            <FaRegEye></FaRegEye>
+                                            :
+                                            <FaRegEyeSlash></FaRegEyeSlash>
+                                        }
+                                    </button>
+                                </div>
                                 <div><a className="link link-hover">Forgot password?</a></div>
                                 <button className="btn btn-primary mt-4">Login</button>
                             </fieldset>

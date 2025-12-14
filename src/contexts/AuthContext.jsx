@@ -31,6 +31,14 @@ const AuthProvider = ({ children }) => {
         });
 
         setUser(result.user);
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Successfully Signed Up",
+            showConfirmButton: false,
+            timer: 1500,
+            theme: 'auto'
+        });
         return result.user;
     };
 

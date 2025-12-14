@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from '../../../contexts/AuthContext';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 
 const Register = () => {
@@ -9,6 +10,13 @@ const Register = () => {
 
     const navigate = useNavigate();
 
+    const [type, setType] = useState(true);
+    const [type2, setType2] = useState(true);
+    const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
+    const [focus, setFocus] = useState(false);
+    const [focus2, setFocus2] = useState(false);
+
     const handleOnSubmit = async (e) => {
         e.preventDefault();
 
@@ -16,6 +24,17 @@ const Register = () => {
         const photo = e.target.photo.value;
         const email = e.target.email.value;
         const password = e.target.password.value;
+        const password2 = e.target.password2.value;
+
+        if (
+            password.length < 6 ||
+            password.toLowerCase() === password ||
+            password.toUpperCase() === password ||
+            password !== password2
+        ) {
+            alert("Please fix the password requirements before submitting.");
+            return;
+        }
 
         const user = await emailSignUp(email, password, name, photo);
 
@@ -27,6 +46,16 @@ const Register = () => {
         e.preventDefault();
         await googleSignIn();
         navigate('/');
+    };
+
+    const typeToggle = (e) => {
+        e.preventDefault();
+        setType(!type);
+    };
+
+    const typeToggle2 = (e) => {
+        e.preventDefault();
+        setType2(!type2);
     };
 
     return (
@@ -49,13 +78,66 @@ const Register = () => {
                                 <label className="label">Email</label>
                                 <input type="email" name='email' className="input" placeholder="Your Email" />
                                 <label className="label">Password</label>
-                                <input type="password" name='password' className="input" placeholder="Password" />
+                                <div className='relative'>
+                                    <input required type={`${type ? 'password' : 'text'}`} name='password' className="input" value={password}
+                                        onChange={(e) => setPassword(e.target.value)} onFocus={() => {
+                                            setFocus(true)
+                                            setFocus2(false)
+                                        }} />
+                                    <button className="absolute inset-y-0 right-6 text-xl text-gray-500" onClick={typeToggle}>
+                                        {type ?
+                                            <FaRegEye></FaRegEye>
+                                            :
+                                            <FaRegEyeSlash></FaRegEyeSlash>
+                                        }
+                                    </button>
+                                </div>
 
+                                {
+                                    focus && <div className='font-semibold'>
+                                        Password
+                                        <p
+                                            className={`${password.toLowerCase() === password ? 'text-red-500' : 'text-green-600'}`}
+                                        >
+                                            must include at least one uppercase letter
+                                        </p>
+                                        <p
+                                            className={`${password.toUpperCase() === password ? 'text-red-500' : 'text-green-600'}`}
+                                        >
+                                            must include at least one lowercase letter
+                                        </p>
+                                        <p
+                                            className={`${password.length < 6 ? 'text-red-500' : 'text-green-600'}`}
+                                        >
+                                            must be at least 6 characters long
+                                        </p>
+                                    </div>
+                                }
 
-                                {/* <label className="label">Confirm Password</label>
-                                <input type="password" name='password2' className="input" placeholder="Confirm Password" /> */}
-
-
+                                <label className="label">Confirm Password</label>
+                                <div className='relative'>
+                                    <input required type={`${type2 ? 'password' : 'text'}`} name='password2' className="input" value={password2}
+                                        onChange={(e) => setPassword2(e.target.value)} onFocus={() => {
+                                            setFocus2(true)
+                                            setFocus(false)
+                                        }} />
+                                    <button className="absolute inset-y-0 right-6 text-xl text-gray-500" onClick={typeToggle2}>
+                                        {type2 ?
+                                            <FaRegEye></FaRegEye>
+                                            :
+                                            <FaRegEyeSlash></FaRegEyeSlash>
+                                        }
+                                    </button>
+                                </div>
+                                {
+                                    focus2 && <div className='font-semibold'>
+                                        <p
+                                            className={`${password2 !== password ? 'text-red-500' : 'text-green-600'}`}
+                                        >
+                                            Confirming password must be the same as password
+                                        </p>
+                                    </div>
+                                }
                                 <button className="btn btn-primary mt-4">Register</button>
                             </fieldset>
                             <button onClick={google} className="btn btn-primary btn-outline bg-white text-black border-[#e5e5e5] mt-2 w-full">
