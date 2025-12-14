@@ -10,6 +10,8 @@ const Home = () => {
 
     const axiosInstance = useAxios();
 
+    const s = topScholarships.sort((a, b) => a.universityWorldRank - b.universityWorldRank);
+
     useEffect(() => {
         const fetchScholarships = async () => {
             try {
@@ -69,7 +71,7 @@ const Home = () => {
                     }
 
                     {!loading &&
-                        topScholarships.map((s) => (
+                        s.slice(0, 6).map((s) => (
                             <div key={s._id} className="p-4 bg-white rounded-lg shadow border">
                                 <h3 className="font-semibold text-lg">{s.scholarshipName}</h3>
                                 <p className="text-sm text-gray-600">{s.universityName}</p>
