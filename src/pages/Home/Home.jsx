@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import useAxios from "../../hooks/useAxios"
+import { motion } from "framer-motion";
 
 const Home = () => {
 
@@ -12,7 +13,7 @@ const Home = () => {
     useEffect(() => {
         const fetchScholarships = async () => {
             try {
-                const response = await axiosInstance.get("/scholarships"); 
+                const response = await axiosInstance.get("/scholarships");
                 setTopScholarships(response.data);
             } catch (err) {
                 console.error("Failed to fetch scholarships:", err);
@@ -29,22 +30,26 @@ const Home = () => {
 
             {/* HERO */}
             <div className="bg-indigo-600 text-white py-20 px-6">
-                <div className="max-w-5xl mx-auto text-center">
-                    <h1 className="text-4xl font-bold">
+                <motion.div className="max-w-5xl mx-auto text-center"
+                    initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
+                    <motion.h1 className="text-4xl font-bold"
+                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
                         Find the Best Scholarships for Your Future
-                    </h1>
-                    <p className="text-lg mt-4 opacity-90">
-                        Search, apply, and succeed — ScholarStream connects you with real opportunities.
-                    </p>
+                    </motion.h1>
 
-                    <Link to='/search'>
-                        <button
-                            className="btn mt-6 px-6 py-3 bg-white text-indigo-700 rounded-lg font-semibold shadow"
-                        >
-                            Search Scholarships
-                        </button>
-                    </Link>
-                </div>
+                    <motion.p className="text-lg mt-4 opacity-90"
+                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                        Search, apply, and succeed — ScholarStream connects you with real opportunities.
+                    </motion.p>
+
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                        <Link to="/search">
+                            <button className="btn mt-6 px-6 py-3 bg-white text-indigo-700 rounded-lg font-semibold shadow">
+                                Search Scholarships
+                            </button>
+                        </Link>
+                    </motion.div>
+                </motion.div>
             </div>
 
             {/* TOP SCHOLARSHIPS */}

@@ -83,17 +83,6 @@ const DashboardLayout = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to='/dashboard/all-reviews'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Reviews">
-                                    {/* All Reviews icon */}
-                                    <div className='text-2xl'>
-                                        <MdReviews />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">All Reviews</span>
-                                </button>
-                            </NavLink>
-                        </li>
-                        <li>
                             <NavLink to='/dashboard/all-applications'>
                                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Applications">
                                     {/* All Applications icon */}
@@ -101,6 +90,17 @@ const DashboardLayout = () => {
                                         <IoDocumentLock />
                                     </div>
                                     <span className="is-drawer-close:hidden">All Applications</span>
+                                </button>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to='/dashboard/all-reviews'>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Reviews">
+                                    {/* All Reviews icon */}
+                                    <div className='text-2xl'>
+                                        <MdReviews />
+                                    </div>
+                                    <span className="is-drawer-close:hidden">All Reviews</span>
                                 </button>
                             </NavLink>
                         </li>
