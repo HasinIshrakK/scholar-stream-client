@@ -132,7 +132,7 @@ const MyApplications = () => {
 
     return (
         <div className="overflow-x-auto mt-6">
-            <table className="table px-4">
+            <table className="table table-zebra px-4">
 
                 <thead>
                     <tr>
@@ -162,10 +162,6 @@ const MyApplications = () => {
                             {/* University */}
                             <td>
                                 {app.universityName}
-                                <br />
-                                <span className="badge badge-ghost badge-sm">
-                                    {app.universityCountry}
-                                </span>
                             </td>
 
                             {/* Status */}

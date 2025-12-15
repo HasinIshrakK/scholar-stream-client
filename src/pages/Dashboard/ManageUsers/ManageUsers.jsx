@@ -100,7 +100,7 @@ const ManageUsers = () => {
                 </p>
             ) : (
                 <div className="overflow-x-auto">
-                    <table className="table">
+                    <table className="table table-zebra">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -131,7 +131,7 @@ const ManageUsers = () => {
                                     <td className="hidden md:table-cell">{user.email}</td>
 
                                     <td>
-                                        <span className="badge capitalize">
+                                        <span className="badge capitalize badge-outline">
                                             {user.role}
                                         </span>
                                     </td>
@@ -143,7 +143,7 @@ const ManageUsers = () => {
                                             <option value="admin">Admin</option>
                                         </select>
 
-                                        <button className="btn btn-sm btn-error" onClick={() => handleDeleteUser(user._id)}>
+                                        <button className="btn btn-sm bg-red-500 text-white" onClick={() => handleDeleteUser(user._id)}>
                                             Delete
                                         </button>
                                     </td>

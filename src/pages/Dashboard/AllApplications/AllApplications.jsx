@@ -183,7 +183,7 @@ const AllApplications = () => {
 
     return (
         <div className="overflow-x-auto mt-6">
-            <table className="table px-4">
+            <table className="table table-zebra px-4">
 
                 <thead>
                     <tr>
