@@ -2,6 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import useAxios from "../../hooks/useAxios"
 import { motion } from "framer-motion";
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+
+import './home.css';
+
+// import required modules
+import { Autoplay, EffectCoverflow, Pagination } from 'swiper/modules';
+
 
 const Home = () => {
 
@@ -105,25 +117,59 @@ const Home = () => {
 
             {/* SUCCESS STORIES */}
             <div className="max-w-5xl mx-auto px-6 mt-12">
-                <h2 className="text-2xl font-semibold">Success Stories</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <h2 className="text-2xl font-semibold mb-6">Success Stories</h2>
 
-                    <div className="p-4 bg-indigo-50 border rounded">
-                        <p>“This scholarship changed my life.”</p>
-                        <p className="mt-2 font-semibold">— Ayesha</p>
-                    </div>
+                <Swiper
+                    effect={'coverflow'}
+                    grabCursor={true}
+                    centeredSlides={true}
+                    slidesPerView={'auto'}
+                    coverflowEffect={{
+                        rotate: 50,
+                        stretch: 0,
+                        depth: 100,
+                        modifier: 1,
+                        slideShadows: false,
+                    }}
+                    autoplay={{
+                        delay: 2000,
+                    }}
+                    loopedSlides={6}
 
-                    <div className="p-4 bg-green-50 border rounded">
-                        <p>“I studied abroad because of ScholarStream.”</p>
-                        <p className="mt-2 font-semibold">— Rafi</p>
-                    </div>
+                    pagination={true}
+                    modules={[EffectCoverflow, Autoplay, Pagination]}
+                    className="mySwiper"
+                >
+                    <SwiperSlide className="max-w-sm">
+                        <div className="p-4 bg-indigo-50 border rounded">
+                            <p>“Before finding this scholarship, I almost gave up on studying abroad.
+                                The process felt confusing and overwhelming.
+                                ScholarStream made everything simple — from finding the right opportunity to understanding the requirements.
+                                This scholarship genuinely changed my life and opened doors I never thought possible.”</p>
+                            <p className="mt-2 font-semibold">— Ayesha</p>
+                        </div>
+                    </SwiperSlide>
 
-                    <div className="p-4 bg-yellow-50 border rounded">
-                        <p>“Very easy and clear application system.”</p>
-                        <p className="mt-2 font-semibold">— Shathi</p>
-                    </div>
+                    <SwiperSlide className="max-w-sm">
+                        <div className="p-4 bg-green-50 border rounded">
+                            <p>“I always thought studying abroad was only for people with connections or lots of money.
+                                Through ScholarStream, I discovered scholarships that actually matched my background and qualifications.
+                                The application process was clear, transparent, and stress-free.
+                                Today, I’m studying overseas because of this platform.”</p>
+                            <p className="mt-2 font-semibold">— Rafi</p>
+                        </div>
+                    </SwiperSlide>
 
-                </div>
+                    <SwiperSlide className="max-w-sm">
+                        <div className="p-4 bg-yellow-50 border rounded">
+                            <p>“What I loved most about ScholarStream was how easy everything felt.
+                                No confusing steps, no hidden information — just clear guidance from start to finish.
+                                I applied confidently, knowing exactly what was required.
+                                It’s one of the few platforms I truly trust for scholarship applications.””</p>
+                            <p className="mt-2 font-semibold">— Shathi</p>
+                        </div>
+                    </SwiperSlide>
+                </Swiper>
             </div>
 
             {/* FAQ */}
@@ -159,7 +205,7 @@ const Home = () => {
 
                 </div>
             </div>
-        </div>
+        </div >
     );
 
 };
