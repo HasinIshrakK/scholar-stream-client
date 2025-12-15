@@ -20,6 +20,7 @@ import AllApplications from "../pages/Dashboard/AllApplications/AllApplications"
 import AddScholarship from "../pages/Dashboard/AddScholarship/AddScholarship";
 import ManageScholarships from "../pages/Dashboard/ManageScholarships/ManageScholarships";
 import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
+import EditScholarship from "../pages/Dashboard/EditScholarship/EditScholarship";
 
 export const router = createBrowserRouter([
     {
@@ -120,6 +121,10 @@ export const router = createBrowserRouter([
             {
                 path: "/dashboard/manage-scholarships",
                 Component: ManageScholarships,
+            },
+            {
+                path: "/dashboard/edit-scholarship/:id",
+                Component: EditScholarship,
             },
             {
                 path: "/dashboard/manage-users",
