@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, } from "recharts";
 import useAxios from "../hooks/useAxios";
 import Loader from "./Loader";
+
+const colors = ["#6366f1", "#22c55e", "#f97316", "#ef4444", "#06b6d4"];
 
 const Analytics = () => {
     const axiosInstance = useAxios();
@@ -37,13 +40,45 @@ const Analytics = () => {
     const totalUsers = users.length;
     const totalScholarships = scholarships.length;
 
-    const totalFeesCollected = applications.reduce(
-        (sum, app) =>
-            app.paymentStatus === "paid"
-                ? sum + Number(app.applicationFees || 0)
-                : sum,
-        0
-    );
+    let totalFeesCollected = 0;
+
+    for (let i = 0; i < applications.length; i++) {
+        if (applications[i].paymentStatus === "paid") {
+            totalFeesCollected += Number(applications[i].applicationFees || 0);
+        }
+    }
+
+    // bar data
+    const universityMap = {};
+    applications.forEach((app) => {
+        universityMap[app.universityName] =
+            (universityMap[app.universityName] || 0) + 1;
+    });
+
+    const universityData = [];
+    for (let key in universityMap) {
+        universityData.push({
+            name: key,
+            applications: universityMap[key]
+        });
+    }
+
+
+    // Pie data
+    const categoryMap = {};
+    scholarships.forEach((s) => {
+        categoryMap[s.scholarshipCategory] =
+            (categoryMap[s.scholarshipCategory] || 0) + 1;
+    });
+
+    const categoryData = [];
+    for (let key in categoryMap) {
+        categoryData.push({
+            name: key,
+            value: categoryMap[key]
+        });
+    }
+
 
     return (
         <div className="p-6 space-y-8">
@@ -65,6 +100,42 @@ const Analytics = () => {
                 </div>
             </div>
 
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                {/* Bar chart */}
+                <div className="bg-white shadow rounded-xl p-6 border">
+                    <h3 className="text-xl font-bold mb-4">
+                        Applications per University
+                    </h3>
+
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={universityData}>
+                            <XAxis dataKey="name" hide />
+                            <YAxis allowDecimals={false} />
+                            <Tooltip />
+                            <Bar dataKey="applications" fill="#6366f1" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+
+                {/* Pie */}
+                <div className="bg-white shadow rounded-xl p-6 border">
+                    <h3 className="text-xl font-bold mb-4">
+                        Scholarships by Category
+                    </h3>
+
+                    <ResponsiveContainer width="100%" height={300}>
+                        <PieChart>
+                            <Pie data={categoryData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
+                                {categoryData.map((_, index) => (
+                                    <Cell key={index} fill={colors[index % colors.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip />
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
+            </div>
         </div>
     );
 };
