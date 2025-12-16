@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
 
     const { emailSignIn, googleSignIn } = useContext(AuthContext);
-
+    const location = useLocation();
     const navigate = useNavigate();
 
     const [type, setType] = useState(true);
@@ -17,13 +17,13 @@ const Login = () => {
         const password = e.target.password.value;
 
         await emailSignIn(email, password);
-        navigate('/');
+        navigate(location?.state || '/')
     };
 
     const google = async (e) => {
         e.preventDefault();
         await googleSignIn();
-        navigate('/');
+        navigate(location?.state || '/')
     };
 
     const typeToggle = (e) => {

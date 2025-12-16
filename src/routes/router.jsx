@@ -21,6 +21,9 @@ import AddScholarship from "../pages/Dashboard/AddScholarship/AddScholarship";
 import ManageScholarships from "../pages/Dashboard/ManageScholarships/ManageScholarships";
 import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
 import EditScholarship from "../pages/Dashboard/EditScholarship/EditScholarship";
+import PrivateRoute from "./PrivateRoute";
+import AdminRoute from "./AdminRoute";
+import ModeratorRoute from "./ModeratorRoute";
 
 export const router = createBrowserRouter([
     {
@@ -70,7 +73,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/dashboard",
-        Component: DashboardLayout,
+        element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
         errorElement: <div className="min-h-screen items-center flex flex-col">
             <Error></Error>
             <Link to='/'>
@@ -100,11 +103,11 @@ export const router = createBrowserRouter([
             // moderator routes
             {
                 path: "/dashboard/all-applications",
-                Component: AllApplications,
+                element: <ModeratorRoute><AllApplications></AllApplications></ModeratorRoute>
             },
             {
                 path: "/dashboard/all-reviews",
-                Component: AllReviews,
+                element: <ModeratorRoute><AllReviews></AllReviews></ModeratorRoute>
             },
 
             // dummy
@@ -116,19 +119,19 @@ export const router = createBrowserRouter([
             // admin routes
             {
                 path: "/dashboard/add-scholarship",
-                Component: AddScholarship,
+                element: <AdminRoute><AddScholarship></AddScholarship></AdminRoute>
             },
             {
                 path: "/dashboard/manage-scholarships",
-                Component: ManageScholarships,
+                element: <AdminRoute><ManageScholarships></ManageScholarships></AdminRoute>
             },
             {
                 path: "/dashboard/edit-scholarship/:id",
-                Component: EditScholarship,
+                element: <AdminRoute><EditScholarship></EditScholarship></AdminRoute>
             },
             {
                 path: "/dashboard/manage-users",
-                Component: ManageUsers,
+                element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>
             },
 
             // payment routes

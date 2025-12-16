@@ -10,8 +10,18 @@ import { IoDocumentLock } from 'react-icons/io5';
 import { GrDocumentConfig } from 'react-icons/gr';
 import { HiOutlineDocumentPlus } from 'react-icons/hi2';
 import { RiUserSettingsLine } from 'react-icons/ri';
+import Loader from '../components/Loader';
+import useRole from '../hooks/useRole';
+import useAuth from '../hooks/useAuth';
 
 const DashboardLayout = () => {
+    const { loading } = useAuth();
+    const { role, roleLoading } = useRole()
+
+    if (loading || roleLoading) {
+        return <Loader></Loader>
+    }
+
     return (
         <div className="drawer lg:drawer-open">
             <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -88,66 +98,73 @@ const DashboardLayout = () => {
                             </NavLink>
                         </li>
                         {/* Moderator */}
-                        <li>
-                            <NavLink to='/dashboard/all-applications'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Applications">
-                                    {/* All Applications icon */}
-                                    <div className='text-2xl'>
-                                        <IoDocumentLock />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">All Applications</span>
-                                </button>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to='/dashboard/all-reviews'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Reviews">
-                                    {/* All Reviews icon */}
-                                    <div className='text-2xl'>
-                                        <MdReviews />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">All Reviews</span>
-                                </button>
-                            </NavLink>
-                        </li>
+                        {role === 'moderator' &&
+                            <>
+                                <li>
+                                    <NavLink to='/dashboard/all-applications'>
+                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Applications">
+                                            {/* All Applications icon */}
+                                            <div className='text-2xl'>
+                                                <IoDocumentLock />
+                                            </div>
+                                            <span className="is-drawer-close:hidden">All Applications</span>
+                                        </button>
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to='/dashboard/all-reviews'>
+                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Reviews">
+                                            {/* All Reviews icon */}
+                                            <div className='text-2xl'>
+                                                <MdReviews />
+                                            </div>
+                                            <span className="is-drawer-close:hidden">All Reviews</span>
+                                        </button>
+                                    </NavLink>
+                                </li>
+                            </>
+                        }
                         {/* Admin */}
-                        <li>
-                            <NavLink to='/dashboard/add-scholarship'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Add Scholarship">
-                                    {/* Add scholarship icon */}
-                                    <div className='text-2xl text-primary'>
-                                        <HiOutlineDocumentPlus />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">Add Scholarship</span>
-                                </button>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to='/dashboard/manage-scholarships'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Manage Scholarships">
-                                    {/* Manage scholarships icon */}
-                                    <div className='text-2xl text-primary'>
-                                        <GrDocumentConfig />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">Manage Scholarships</span>
-                                </button>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to='/dashboard/manage-users'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Manage Users">
-                                    {/* Manage users icon */}
-                                    <div className='text-2xl text-primary'>
-                                        <RiUserSettingsLine />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">Manage Users</span>
-                                </button>
-                            </NavLink>
-                        </li>
+                        {role === 'admin' &&
+                            <>
+                                <li>
+                                    <NavLink to='/dashboard/add-scholarship'>
+                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Add Scholarship">
+                                            {/* Add scholarship icon */}
+                                            <div className='text-2xl text-primary'>
+                                                <HiOutlineDocumentPlus />
+                                            </div>
+                                            <span className="is-drawer-close:hidden">Add Scholarship</span>
+                                        </button>
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to='/dashboard/manage-scholarships'>
+                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Manage Scholarships">
+                                            {/* Manage scholarships icon */}
+                                            <div className='text-2xl text-primary'>
+                                                <GrDocumentConfig />
+                                            </div>
+                                            <span className="is-drawer-close:hidden">Manage Scholarships</span>
+                                        </button>
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to='/dashboard/manage-users'>
+                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Manage Users">
+                                            {/* Manage users icon */}
+                                            <div className='text-2xl text-primary'>
+                                                <RiUserSettingsLine />
+                                            </div>
+                                            <span className="is-drawer-close:hidden">Manage Users</span>
+                                        </button>
+                                    </NavLink>
+                                </li>
+                            </>}
                     </ul>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

@@ -2,21 +2,23 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router';
 import { AuthContext } from '../../contexts/AuthContext';
 
-const l = <>
-    <Link to='/'>
-        <li className='mr-2'>Home</li>
-    </Link>
-    <Link to='/all-scholarships'>
-        <li className='mr-2'>All Scholarships</li>
-    </Link>
-    <Link to='/dashboard'>
-        <li className='mr-2'>Dashboard</li>
-    </Link>
-</>
-
 const Navbar = () => {
 
     const { user, logout } = useContext(AuthContext);
+
+    const l = <>
+        <Link to='/'>
+            <li className='mr-2'>Home</li>
+        </Link>
+        <Link to='/all-scholarships'>
+            <li className='mr-2'>All Scholarships</li>
+        </Link>
+        {user &&
+            <Link to='/dashboard'>
+                <li className='mr-2'>Dashboard</li>
+            </Link>
+        }
+    </>
 
     return (
         <div className="navbar bg-base-100 shadow-sm sticky top-0 z-10">
