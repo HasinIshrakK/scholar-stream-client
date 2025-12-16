@@ -13,7 +13,7 @@ import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
 import MyApplications from "../pages/Dashboard/MyApplications/MyApplications";
 import MyReviews from "../pages/Dashboard/MyReviews/MyReviews";
 import Success from "../pages/Dashboard/Payment/Success";
-import Cancel from "../pages/Dashboard/Payment/Cancel";
+import Failed from "../pages/Dashboard/Payment/Failed";
 import EditApplication from "../pages/Dashboard/MyApplications/EditApplication";
 import AllReviews from "../pages/Dashboard/AllReviews/AllReviews";
 import AllApplications from "../pages/Dashboard/AllApplications/AllApplications";
@@ -137,8 +137,8 @@ export const router = createBrowserRouter([
                 Component: Success,
             },
             {
-                path: "/dashboard/payment-cancelled",
-                Component: Cancel,
+                path: "/dashboard/payment-failed/:id",
+                Component: Failed,
             },
             {
                 path: "/dashboard/*",

@@ -31,7 +31,7 @@ const MyApplications = () => {
         };
 
         fetchApplications();
-    }, [user?.email, axiosInstance]);
+    }, [user?.email, axiosInstance, applications]);
 
     if (loading) {
         return (

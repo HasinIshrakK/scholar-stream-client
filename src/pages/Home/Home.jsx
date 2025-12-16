@@ -97,16 +97,11 @@ const Home = () => {
                                 </div>
 
                                 <div className="mt-4 flex justify-between items-center">
-                                    <Link
-                                        to={`/scholarships/${s._id}`}
-                                        className="text-indigo-600 hover:underline"
-                                    >
-                                        View Details
-                                    </Link>
-                                    <button
-                                        className="px-3 py-1 bg-indigo-600 text-white rounded"
-                                    >
-                                        Apply
+
+                                    <button className="px-3 py-1 bg-indigo-600 text-white rounded">
+                                        <Link to={`/scholarships/${s._id}`}>
+                                            View Details
+                                        </Link>
                                     </button>
                                 </div>
                             </div>
@@ -141,7 +136,7 @@ const Home = () => {
                     className="mySwiper"
                 >
                     <SwiperSlide className="max-w-sm">
-                        <div className="p-4 bg-indigo-50 border rounded">
+                        <div className="p-4 mx-6 sm:mx-0 bg-indigo-50 border rounded">
                             <p>“Before finding this scholarship, I almost gave up on studying abroad.
                                 The process felt confusing and overwhelming.
                                 ScholarStream made everything simple — from finding the right opportunity to understanding the requirements.
@@ -151,7 +146,7 @@ const Home = () => {
                     </SwiperSlide>
 
                     <SwiperSlide className="max-w-sm">
-                        <div className="p-4 bg-green-50 border rounded">
+                        <div className="p-4 mx-6 sm:mx-0 bg-green-50 border rounded">
                             <p>“I always thought studying abroad was only for people with connections or lots of money.
                                 Through ScholarStream, I discovered scholarships that actually matched my background and qualifications.
                                 The application process was clear, transparent, and stress-free.
@@ -161,7 +156,7 @@ const Home = () => {
                     </SwiperSlide>
 
                     <SwiperSlide className="max-w-sm">
-                        <div className="p-4 bg-yellow-50 border rounded">
+                        <div className="p-4 mx-6 sm:mx-0 bg-yellow-50 border rounded">
                             <p>“What I loved most about ScholarStream was how easy everything felt.
                                 No confusing steps, no hidden information — just clear guidance from start to finish.
                                 I applied confidently, knowing exactly what was required.
