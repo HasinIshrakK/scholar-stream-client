@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useAxios from "../../hooks/useAxios"
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-
 import './home.css';
-
-// import required modules
 import { Autoplay, EffectCoverflow, Pagination } from 'swiper/modules';
 
 
 const Home = () => {
-
+    const navigate = useNavigate();
     const [topScholarships, setTopScholarships] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -57,11 +52,9 @@ const Home = () => {
                     </motion.p>
 
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                        <Link to="/">
-                            <button className="btn mt-6 px-6 py-3 bg-white text-indigo-700 rounded-lg font-semibold shadow">
-                                Search Scholarships
-                            </button>
-                        </Link>
+                        <button onClick={() => navigate('/all-scholarships?focus=true')} className="btn mt-6 px-6 py-3 bg-white text-indigo-700 rounded-lg font-semibold shadow">
+                            Search Scholarships
+                        </button>
                     </motion.div>
                 </motion.div>
             </div>
