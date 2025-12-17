@@ -3,11 +3,17 @@ import ScholarshipCard from '../../components/Cards/ScholarshipCard';
 import SearchBar from '../../components/SearchBar';
 import useAxios from "../../hooks/useAxios";
 import { useSearchParams } from 'react-router';
+import Loader from '../../components/Loader';
 
 const AllScholarships = () => {
     const [scholarships, setScholarships] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
+    const [degree, setDegree] = useState("");
+    const [category, setCategory] = useState("");
+    const [country, setCountry] = useState("");
+    const [sort, setSort] = useState("scholarshipPostDate");
+    const [order, setOrder] = useState("desc");
 
     const axiosInstance = useAxios();
 
@@ -25,7 +31,7 @@ const AllScholarships = () => {
         const fetchScholarships = async () => {
             try {
                 const res = await axiosInstance.get(`/scholarships`, {
-                    params: { search }
+                    params: { search, degree, category, country, sort }
                 });
                 setScholarships(res.data);
             } catch (err) {
@@ -37,7 +43,12 @@ const AllScholarships = () => {
         };
 
         fetchScholarships();
-    }, [axiosInstance, search]);
+    }, [axiosInstance, search, degree, category, country, sort]);
+
+    {
+        loading &&
+            <Loader />
+    }
 
     return (
         <div className="min-h-screen text-gray-900 px-4 md:px-10 lg:px-16 py-10">
@@ -45,41 +56,42 @@ const AllScholarships = () => {
             <div className="mb-10">
                 <h1 className="text-3xl font-bold mb-6 text-center">All Scholarships</h1>
 
-                <SearchBar ref={searchRef} value={search} onChange={(e) => setSearch(e.target.value)} />
+                <div className='flex justify-between'>
+                    <SearchBar ref={searchRef} value={search} onChange={(e) => setSearch(e.target.value)} />
+                    <select onChange={(e) => setSort(e.target.value)}>
+                        <option value="scholarshipPostDate">Newest First</option>
+                        <option value="applicationDeadline">Deadline</option>
+                        <option value="applicationFees">Fees (high to low)</option>
+                    </select>
+                </div>
+
 
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-hidden">
-                    <select className="border p-3 rounded-lg w-56 sm:w-full">
-                        <option value="">Filter by Category</option>
-                        <option value="Undergraduate">Undergraduate</option>
-                        <option value="Masters">Masters</option>
-                        <option value="PhD">PhD</option>
+                    <select onChange={(e) => setDegree(e.target.value)} className="select select-bordered">
+                        <option value="">All Degrees</option>
+                        <option>Bachelors</option>
+                        <option>Masters</option>
+                        <option>PhD</option>
                     </select>
 
-                    <select className="border p-3 rounded-lg w-56 sm:w-full">
-                        <option value="">Filter by Location</option>
-                        <option value="USA">USA</option>
-                        <option value="UK">UK</option>
-                        <option value="Japan">Japan</option>
+                    <select onChange={(e) => setCountry(e.target.value)} className="select select-bordered">
+                        <option value="">All Countries</option>
+                        <option>USA</option>
+                        <option>UK</option>
+                        <option>Japan</option>
                     </select>
 
-                    <select className="border p-3 rounded-lg w-56 sm:w-full">
-                        <option value="">Filter by Subject</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Business">Business</option>
-                        <option value="Science">Science</option>
+                    <select onChange={(e) => setCategory(e.target.value)} className="select select-bordered">
+                        <option value="">All Categories</option>
+                        <option>Full Fund</option>
+                        <option>Partial Fund</option>
+                        <option>Self Fund</option>
                     </select>
                 </div>
 
             </div>
 
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {loading &&
-                    Array.from({ length: scholarships.length }).map((_, i) => (
-                        <div key={i} className="h-64 bg-gray-200 animate-pulse rounded-md" />
-                    ))
-                }
-
                 {!loading &&
                     scholarships.map((scholarship) => (
                         <ScholarshipCard key={scholarship._id} scholarship={scholarship} />
