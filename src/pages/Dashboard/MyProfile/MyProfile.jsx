@@ -1,9 +1,18 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { Link } from "react-router";
+import useAuth from "../../../hooks/useAuth";
+import Loader from "../../../components/Loader";
+import useRole from "../../../hooks/useRole";
 
 const MyProfile = () => {
+    const { loading } = useAuth();
     const { user, logout } = useContext(AuthContext);
+    const { role, roleLoading } = useRole()
+
+    if (loading || roleLoading) {
+        return <Loader></Loader>
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
@@ -26,7 +35,7 @@ const MyProfile = () => {
                                 />
                             </div>
                         </div>
-                        {/* I may do apply it if I get time and make edit profile page */}
+                        {/* I may apply it if I get time and make edit profile page */}
                         {/* <button
                             className="mt-4 text-sm px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                         >
@@ -49,7 +58,7 @@ const MyProfile = () => {
 
                             <div className="p-4 border rounded-lg bg-gray-50">
                                 <p className="text-sm text-gray-500">Account Type</p>
-                                <p className="font-semibold">Student</p>
+                                <p className="font-semibold capitalize">{role || "Student"}</p>
                             </div>
 
                             <div className="p-4 border rounded-lg bg-gray-50">

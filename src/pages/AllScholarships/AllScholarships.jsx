@@ -13,7 +13,6 @@ const AllScholarships = () => {
     const [category, setCategory] = useState("");
     const [country, setCountry] = useState("");
     const [sort, setSort] = useState("scholarshipPostDate");
-    const [order, setOrder] = useState("desc");
 
     const axiosInstance = useAxios();
 
@@ -56,7 +55,7 @@ const AllScholarships = () => {
             <div className="mb-10">
                 <h1 className="text-3xl font-bold mb-6 text-center">All Scholarships</h1>
 
-                <div className='flex justify-between'>
+                <div className='sm:flex space-y-2 justify-between'>
                     <SearchBar ref={searchRef} value={search} onChange={(e) => setSearch(e.target.value)} />
                     <select onChange={(e) => setSort(e.target.value)}>
                         <option value="scholarshipPostDate">Newest First</option>
@@ -64,7 +63,6 @@ const AllScholarships = () => {
                         <option value="applicationFees">Fees (high to low)</option>
                     </select>
                 </div>
-
 
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-hidden">
                     <select onChange={(e) => setDegree(e.target.value)} className="select select-bordered">
