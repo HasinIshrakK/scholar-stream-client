@@ -101,3 +101,13 @@ The goal is to streamline the entire scholarship application and payment process
 - Admin and moderator routes are protected
 
 ---
+
+## Installation
+
+```bash
+git clone https://github.com/HasinIshrakK/scholar-stream-client
+cd scholar-stream-client
+npm install
+npm start
+
+```
