@@ -84,7 +84,7 @@ const ManageUsers = () => {
     return (
         <div className="p-4">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">Manage Users</h2>
+                <h2 className="text-2xl font-bold" style={{ fontFamily: "'Fraunces', serif" }}>Manage Users</h2>
 
                 <select className="select select-bordered" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
                     <option value="all">All Roles</option>
@@ -117,7 +117,7 @@ const ManageUsers = () => {
                                     <td>{index + 1}</td>
 
                                     <td className="flex items-center gap-3">
-                                        <img src={user.photo || "https://i.pravatar.cc/40"} alt="user" className="w-10 h-10 rounded-full hidden sm:block" />
+                                        <img src={user.photo || "/assets/user.png"} alt="User" className="w-10 h-10 rounded-full hidden sm:block" />
                                         <div className="flex flex-col">
                                             <span className="font-semibold">
                                                 {user.name || "Unnamed"}

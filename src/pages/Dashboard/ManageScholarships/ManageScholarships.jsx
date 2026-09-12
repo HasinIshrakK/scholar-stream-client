@@ -67,7 +67,7 @@ const ManageScholarships = () => {
 
     return (
         <div className="overflow-x-auto p-4">
-            <h2 className="text-2xl font-bold mb-4">Manage Scholarships</h2>
+            <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "'Fraunces', serif" }}>Manage Scholarships</h2>
 
             {scholarships.length === 0 ? (
                 <p className="text-center text-gray-500">
