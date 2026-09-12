@@ -35,7 +35,7 @@ const EditApplication = () => {
 
     return (
         <div className="max-w-3xl mx-auto p-6 bg-white shadow rounded-lg">
-            <h2 className="text-2xl font-bold mb-6">Edit Application</h2>
+            <h2 className="text-2xl font-bold mb-6" style={{ fontFamily: "'Fraunces', serif" }}>Edit Application</h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
 
@@ -72,14 +72,14 @@ const EditApplication = () => {
                 </div>
 
                 <div className="flex gap-3">
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn text-white bg-[#000363] hover:bg-[#C9A227] hover:text-black">
                         Update
                     </button>
 
                     <button
                         type="button"
                         onClick={() => navigate(-1)}
-                        className="btn btn-outline"
+                        className="btn hover:border-[#C9A227] bg-white"
                     >
                         Cancel
                     </button>
