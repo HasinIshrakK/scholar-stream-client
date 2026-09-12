@@ -18,9 +18,9 @@ const Footer = () => {
                 <p className="font-bold">
                     ScholerStream Ltd.
                     <br />
-                    Providing reliable service 2000
+                    Providing reliable service since 2000
                 </p>
-                <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
+                <p>Copyright © {new Date().getFullYear()} - All rights reserved</p>
             </aside>
             <nav>
                 <div className="grid grid-flow-col gap-4 items-center">
