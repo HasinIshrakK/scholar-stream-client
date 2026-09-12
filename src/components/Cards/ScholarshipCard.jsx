@@ -1,44 +1,74 @@
 import React from "react";
 import { Link } from "react-router";
+import { FaMapMarkerAlt, FaRegClock } from "react-icons/fa";
+
+const FALLBACK_IMAGE = "/assets/university-placeholder.jpeg";
 
 const ScholarshipCard = ({ scholarship }) => {
+    const {
+        _id,
+        scholarshipName,
+        universityName,
+        universityImage,
+        universityCity,
+        universityCountry,
+        scholarshipCategory,
+        applicationFees,
+        applicationDeadline,
+    } = scholarship;
 
     return (
-        <div className="border rounded-xl shadow-md p-4 bg-white">
-            {/* University Image */}
-            <img
-                src={scholarship.universityImage}
-                alt={scholarship.universityName}
-                className="h-40 w-full object-cover rounded-lg mb-3"
-            />
+        <div className="group bg-white rounded-xl border border-slate-200 hover:border-[#C9A227] hover:shadow-lg transition-all duration-200 overflow-hidden flex flex-col">
+            <div className="relative">
+                <img
+                    src={universityImage || FALLBACK_IMAGE}
+                    onError={(e) => { e.currentTarget.src = FALLBACK_IMAGE; }}
+                    alt={universityName}
+                    className="h-40 w-full object-cover"
+                />
+                {scholarshipCategory && (
+                    <span className="absolute top-3 left-3 bg-white/95 text-[#0F1B3C] text-xs font-semibold px-2.5 py-1 rounded-full">
+                        {scholarshipCategory}
+                    </span>
+                )}
+            </div>
 
-            {/* University Name */}
-            <h2 className="text-lg font-bold mb-1">{scholarship.scholarshipName}</h2>
-            <p className="text-gray-600">
-                <span className="font-semibold">{scholarship.universityName}</span> 
-            </p>
+            <div className="p-5 flex flex-col flex-1">
+                <h2
+                    className="text-lg font-semibold text-[#0F1B3C] mb-1 leading-snug line-clamp-2"
+                    style={{ fontFamily: "'Fraunces', serif" }}
+                >
+                    {scholarshipName}
+                </h2>
+                <p className="text-sm text-slate-500 mb-4">{universityName}</p>
 
-            {/* Category + Location */}
-            <p className="text-sm text-gray-600">
-                <span className="font-semibold">Category:</span> {scholarship.scholarshipCategory}
-            </p>
+                <div className="space-y-2 text-sm text-slate-600 mb-4">
+                    <div className="flex items-center gap-2">
+                        <FaMapMarkerAlt className="text-[#C9A227] text-xs shrink-0" />
+                        <span>{universityCity}, {universityCountry}</span>
+                    </div>
+                    {applicationDeadline && (
+                        <div className="flex items-center gap-2">
+                            <FaRegClock className="text-[#C9A227] text-xs shrink-0" />
+                            <span>Deadline {new Date(applicationDeadline).toLocaleDateString()}</span>
+                        </div>
+                    )}
+                </div>
 
-            <p className="text-sm text-gray-600 mb-2">
-                <span className="font-semibold">Location:</span> {scholarship.universityCity}, {scholarship.universityCountry}
-            </p>
+                <div className="flex items-center justify-between pt-3 border-t border-slate-100 mb-4 text-sm">
+                    <span className="text-slate-400">Application fee</span>
+                    <span className="font-semibold text-[#0F1B3C]">
+                        {applicationFees > 0 ? `$${applicationFees}` : "Free"}
+                    </span>
+                </div>
 
-            {/* Application Fee */}
-            <p className="text-sm mb-3">
-                <span className="font-semibold">Application Fee:</span>{" "}
-                {scholarship.applicationFees > 0 ? `${scholarship.applicationFees} USD` : "Free"}
-            </p>
-
-            {/* View Details Button */}
-            <Link to={`/scholarships/${scholarship._id}`}>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg mt-2 hover:bg-blue-700">
-                    View Details
-                </button>
-            </Link>
+                <Link
+                    to={`/scholarships/${_id}`}
+                    className="mt-auto block w-full text-center py-2.5 bg-[#0F1B3C] text-white rounded-lg font-medium text-sm group-hover:bg-[#C9A227] group-hover:text-[#0F1B3C] transition-colors"
+                >
+                    View details
+                </Link>
+            </div>
         </div>
     );
 };
