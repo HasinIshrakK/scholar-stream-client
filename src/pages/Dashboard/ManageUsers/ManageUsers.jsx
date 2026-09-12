@@ -143,7 +143,7 @@ const ManageUsers = () => {
                                             <option value="admin">Admin</option>
                                         </select>
 
-                                        <button className="btn btn-sm bg-red-500 text-white" onClick={() => handleDeleteUser(user._id)}>
+                                        <button className="btn btn-sm bg-red-600 text-white hover:bg-red-700 border-none disabled:opacity-70" onClick={() => handleDeleteUser(user._id)}>
                                             Delete
                                         </button>
                                     </td>

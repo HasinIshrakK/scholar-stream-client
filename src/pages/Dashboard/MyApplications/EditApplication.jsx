@@ -72,7 +72,7 @@ const EditApplication = () => {
                 </div>
 
                 <div className="flex gap-3">
-                    <button type="submit" className="btn text-white bg-[#000363] hover:bg-[#C9A227] hover:text-black">
+                    <button type="submit" className="btn text-white bg-[#000363] hover:bg-[#C9A227] hover:text-[#0F1B3C]">
                         Update
                     </button>
 

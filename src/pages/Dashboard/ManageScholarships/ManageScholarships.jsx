@@ -117,11 +117,11 @@ const ManageScholarships = () => {
                                 </td>
 
                                 <td className="flex gap-2">
-                                    <Link to={`/dashboard/edit-scholarship/${sch._id}`} className="btn btn-sm btn-primary text-white">
+                                    <Link to={`/dashboard/edit-scholarship/${sch._id}`} className="btn btn-sm btn-primary text-white bg-[#0F1B3C] hover:bg-[#C9A227] hover:text-[#0F1B3C]">
                                         <FaEdit />
                                     </Link>
 
-                                    <button onClick={() => handleDelete(sch._id)} className="btn btn-sm bg-red-500 text-white">
+                                    <button onClick={() => handleDelete(sch._id)} className="btn btn-sm bg-red-600 text-white hover:bg-red-700 border-none disabled:opacity-70">
                                         <FaTrash />
                                     </button>
                                 </td>

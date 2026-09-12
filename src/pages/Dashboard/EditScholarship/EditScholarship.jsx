@@ -178,7 +178,7 @@ const EditScholarship = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                    <button type="submit" className="btn btn-primary w-full">
+                    <button type="submit" className="btn text-white bg-[#000363] hover:bg-[#C9A227] hover:text-[#0F1B3C] w-full">
                         Update Scholarship
                     </button>
                 </div>
