@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Outlet } from 'react-router';
+import { Link, NavLink, Outlet } from 'react-router';
 import DashboardNavbar from '../components/Navbar/DashboardNavbar';
 import Footer from '../components/Footer/Footer';
 import { MdOutlineReviews, MdReviews } from 'react-icons/md';
@@ -17,10 +17,9 @@ import useAuth from '../hooks/useAuth';
 const DRAWER_ID = 'my-drawer-4';
 
 const SIDEBAR_LINK_CLASS = ({ isActive }) =>
-    `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-        isActive
-            ? 'bg-white/10 text-white'
-            : 'text-slate-300 hover:bg-white/5 hover:text-white'
+    `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
+        ? 'bg-white/10 text-white'
+        : 'text-slate-300 hover:bg-white/5 hover:text-white'
     }`;
 
 const SidebarLink = ({ to, icon, label }) => (
@@ -70,12 +69,14 @@ const DashboardLayout = () => {
                 <label htmlFor={DRAWER_ID} aria-label="Close sidebar" className="drawer-overlay"></label>
                 <div className="flex min-h-full w-64 flex-col bg-[#0F1B3C] py-6">
                     <div className="px-4 mb-6 hidden lg:block">
-                        <span
-                            className="text-lg font-semibold text-white"
-                            style={{ fontFamily: "'Fraunces', serif" }}
-                        >
-                            ScholarStream
-                        </span>
+                        <Link to="/">
+                            <span
+                                className="text-lg font-semibold text-white"
+                                style={{ fontFamily: "'Fraunces', serif" }}
+                            >
+                                ScholarStream
+                            </span>
+                        </Link>
                     </div>
 
                     <nav className="flex-1 px-2">

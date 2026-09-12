@@ -1,25 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Loader = () => {
-  return (
-    <StyledWrapper>
-      <div className="min-h-screen items-center flex flex-col">
-        <div className="loader">
-          <div className="square" id="sq1" />
-          <div className="square" id="sq2" />
-          <div className="square" id="sq3" />
-          <div className="square" id="sq4" />
-          <div className="square" id="sq5" />
-          <div className="square" id="sq6" />
-          <div className="square" id="sq7" />
-          <div className="square" id="sq8" />
-          <div className="square" id="sq9" />
-        </div>
-      </div>
-    </StyledWrapper>
-  );
-}
+const Loader = ({ fullScreen = true }) => {
+    return (
+        <StyledWrapper>
+            <div className={`flex flex-col items-center justify-center ${fullScreen ? 'min-h-screen' : 'py-10'}`}>
+                <div className="loader">
+                    <div className="square" id="sq1" />
+                    <div className="square" id="sq2" />
+                    <div className="square" id="sq3" />
+                    <div className="square" id="sq4" />
+                    <div className="square" id="sq5" />
+                    <div className="square" id="sq6" />
+                    <div className="square" id="sq7" />
+                    <div className="square" id="sq8" />
+                    <div className="square" id="sq9" />
+                </div>
+            </div>
+        </StyledWrapper>
+    );
+};
 
 const StyledWrapper = styled.div`
   @keyframes loader_5191 {
@@ -32,8 +32,20 @@ const StyledWrapper = styled.div`
     }
   }
 
+  /* This is the actual fix: .square children are absolutely positioned
+     against .loader, so .loader needs to BE a positioned element with a
+     real size. Without this, the squares position against the nearest
+     positioned ancestor up the tree — often the page itself — which is
+     why placement looked different depending on where the Loader was
+     mounted (full page vs. inside a modal vs. inside a card). */
+  .loader {
+    position: relative;
+    width: 60px;
+    height: 60px;
+  }
+
   .square {
-    background: #ddd;
+    background: #0f1b3c;
     width: 10px;
     height: 10px;
     position: absolute;
@@ -66,6 +78,7 @@ const StyledWrapper = styled.div`
   }
 
   #sq5 {
+    background: #c9a227;
     animation: loader_5191 675ms ease-in-out 300ms infinite;
   }
 
@@ -89,6 +102,7 @@ const StyledWrapper = styled.div`
     margin-top: 15px;
     margin-left: 15px;
     animation: loader_5191 675ms ease-in-out 600ms infinite;
-  }`;
+  }
+`;
 
 export default Loader;
