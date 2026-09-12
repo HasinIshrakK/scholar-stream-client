@@ -5,7 +5,7 @@ import Footer from '../components/Footer/Footer';
 import { MdOutlineReviews, MdReviews } from 'react-icons/md';
 import { TiDocumentText } from 'react-icons/ti';
 import { FaRegUser } from 'react-icons/fa';
-import { FiHome, FiSidebar } from 'react-icons/fi';
+import { FiHome } from 'react-icons/fi';
 import { IoDocumentLock } from 'react-icons/io5';
 import { GrDocumentConfig } from 'react-icons/gr';
 import { HiOutlineDocumentPlus } from 'react-icons/hi2';
@@ -14,157 +14,96 @@ import Loader from '../components/Loader';
 import useRole from '../hooks/useRole';
 import useAuth from '../hooks/useAuth';
 
+const DRAWER_ID = 'my-drawer-4';
+
+const SIDEBAR_LINK_CLASS = ({ isActive }) =>
+    `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+        isActive
+            ? 'bg-white/10 text-white'
+            : 'text-slate-300 hover:bg-white/5 hover:text-white'
+    }`;
+
+const SidebarLink = ({ to, icon, label }) => (
+    <li>
+        <NavLink to={to} className={SIDEBAR_LINK_CLASS} end={to === '/dashboard'}>
+            <span className="text-lg shrink-0">{icon}</span>
+            <span>{label}</span>
+        </NavLink>
+    </li>
+);
+
+const SidebarSection = ({ title, children }) => (
+    <div className="mb-4">
+        {title && (
+            <p className="px-4 mb-1 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                {title}
+            </p>
+        )}
+        <ul className="space-y-0.5">{children}</ul>
+    </div>
+);
+
 const DashboardLayout = () => {
     const { loading } = useAuth();
-    const { role, roleLoading } = useRole()
+    const { role, roleLoading } = useRole();
 
     if (loading || roleLoading) {
-        return <Loader></Loader>
+        return <Loader />;
     }
 
     return (
         <div className="drawer lg:drawer-open">
-            <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content">
-                {/* Navbar */}
-                <nav className="navbar w-full bg-base-300 shadow-sm sticky top-0 z-10">
-                    <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-square btn-ghost">
-                        {/* Sidebar toggle icon */}
-                        <div className='text-2xl'>
-                            <FiSidebar />
-                        </div>
-                    </label>
-                    <DashboardNavbar />
-                </nav>
-                {/* Page content here */}
-                <div className="min-h-screen bg-base-100 text-gray-900">
+            <input id={DRAWER_ID} type="checkbox" className="drawer-toggle" />
+
+            <div className="drawer-content flex flex-col">
+                <div className="sticky top-0 z-20">
+                    <DashboardNavbar drawerId={DRAWER_ID} />
+                </div>
+
+                <div className="min-h-screen bg-[#FAF9F5] text-[#1A1A1A] flex-1">
                     <Outlet />
                 </div>
-                <Footer></Footer>
+                <Footer />
             </div>
 
-            <div className="drawer-side is-drawer-close:overflow-visible">
-                <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
-                <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
-                    {/* Sidebar content here */}
-                    <ul className="menu w-full grow lg:pt-10">
-                        {/* List item */}
-                        <li>
-                            <NavLink to='/dashboard'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Homepage">
-                                    {/* Home icon */}
-                                    <div className='text-2xl'>
-                                        <FiHome />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">Homepage</span>
-                                </button>
-                            </NavLink>
-                        </li>
+            <div className="drawer-side z-30">
+                <label htmlFor={DRAWER_ID} aria-label="Close sidebar" className="drawer-overlay"></label>
+                <div className="flex min-h-full w-64 flex-col bg-[#0F1B3C] py-6">
+                    <div className="px-4 mb-6 hidden lg:block">
+                        <span
+                            className="text-lg font-semibold text-white"
+                            style={{ fontFamily: "'Fraunces', serif" }}
+                        >
+                            ScholarStream
+                        </span>
+                    </div>
 
-                        {/* List item */}
+                    <nav className="flex-1 px-2">
+                        <SidebarSection>
+                            <SidebarLink to='/dashboard' icon={<FiHome />} label="Homepage" />
+                            <SidebarLink to='/dashboard/my-profile' icon={<FaRegUser />} label="My Profile" />
+                            <SidebarLink to='/dashboard/my-applications' icon={<TiDocumentText />} label="My Applications" />
+                            <SidebarLink to='/dashboard/my-reviews' icon={<MdOutlineReviews />} label="My Reviews" />
+                        </SidebarSection>
 
-                        {/* Student */}
-                        <li>
-                            <NavLink to='/dashboard/my-profile'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="My Profile">
-                                    {/* User icon */}
-                                    <div className='text-2xl'>
-                                        <FaRegUser />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">My Profile</span>
-                                </button>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to='/dashboard/my-applications'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="My Applications">
-                                    {/* Applications icon */}
-                                    <div className='text-2xl'>
-                                        <TiDocumentText />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">My Applications</span>
-                                </button>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to='/dashboard/my-reviews'>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="My Reviews">
-                                    {/* Reviews icon */}
-                                    <div className='text-2xl'>
-                                        <MdOutlineReviews />
-                                    </div>
-                                    <span className="is-drawer-close:hidden">My Reviews</span>
-                                </button>
-                            </NavLink>
-                        </li>
-                        {/* Moderator */}
-                        {role === 'moderator' &&
-                            <>
-                                <li>
-                                    <NavLink to='/dashboard/all-applications'>
-                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Applications">
-                                            {/* All Applications icon */}
-                                            <div className='text-2xl'>
-                                                <IoDocumentLock />
-                                            </div>
-                                            <span className="is-drawer-close:hidden">All Applications</span>
-                                        </button>
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to='/dashboard/all-reviews'>
-                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="All Reviews">
-                                            {/* All Reviews icon */}
-                                            <div className='text-2xl'>
-                                                <MdReviews />
-                                            </div>
-                                            <span className="is-drawer-close:hidden">All Reviews</span>
-                                        </button>
-                                    </NavLink>
-                                </li>
-                            </>
-                        }
-                        {/* Admin */}
-                        {role === 'admin' &&
-                            <>
-                                <li>
-                                    <NavLink to='/dashboard/add-scholarship'>
-                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Add Scholarship">
-                                            {/* Add scholarship icon */}
-                                            <div className='text-2xl text-primary'>
-                                                <HiOutlineDocumentPlus />
-                                            </div>
-                                            <span className="is-drawer-close:hidden">Add Scholarship</span>
-                                        </button>
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to='/dashboard/manage-scholarships'>
-                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Manage Scholarships">
-                                            {/* Manage scholarships icon */}
-                                            <div className='text-2xl text-primary'>
-                                                <GrDocumentConfig />
-                                            </div>
-                                            <span className="is-drawer-close:hidden">Manage Scholarships</span>
-                                        </button>
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to='/dashboard/manage-users'>
-                                        <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex space-x-2" data-tip="Manage Users">
-                                            {/* Manage users icon */}
-                                            <div className='text-2xl text-primary'>
-                                                <RiUserSettingsLine />
-                                            </div>
-                                            <span className="is-drawer-close:hidden">Manage Users</span>
-                                        </button>
-                                    </NavLink>
-                                </li>
-                            </>}
-                    </ul>
+                        {role === 'moderator' && (
+                            <SidebarSection title="Moderator">
+                                <SidebarLink to='/dashboard/all-applications' icon={<IoDocumentLock />} label="All Applications" />
+                                <SidebarLink to='/dashboard/all-reviews' icon={<MdReviews />} label="All Reviews" />
+                            </SidebarSection>
+                        )}
+
+                        {role === 'admin' && (
+                            <SidebarSection title="Admin">
+                                <SidebarLink to='/dashboard/add-scholarship' icon={<HiOutlineDocumentPlus />} label="Add Scholarship" />
+                                <SidebarLink to='/dashboard/manage-scholarships' icon={<GrDocumentConfig />} label="Manage Scholarships" />
+                                <SidebarLink to='/dashboard/manage-users' icon={<RiUserSettingsLine />} label="Manage Users" />
+                            </SidebarSection>
+                        )}
+                    </nav>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 
