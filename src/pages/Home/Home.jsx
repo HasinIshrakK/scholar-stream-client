@@ -8,19 +8,64 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import './home.css';
 import { Autoplay, EffectCoverflow, Pagination } from 'swiper/modules';
-import { FaGraduationCap, FaGlobeAmericas, FaAward, FaSearch, FaFileAlt, FaCheckCircle } from 'react-icons/fa';
+import {
+    FaGraduationCap, FaGlobeAmericas, FaAward, FaSearch, FaFileAlt, FaCheckCircle,
+    FaUserTie, FaLaptopCode, FaFlask, FaBalanceScale, FaPalette, FaCoins,
+    FaShieldAlt, FaHeadset, FaRoute, FaBell, FaArrowRight
+} from 'react-icons/fa';
+
+// Fields students commonly search scholarships for. Counts are illustrative
+// and should be wired up to real aggregate data once the API supports it.
+const FIELDS = [
+    { name: "Business & Management", icon: <FaUserTie />, count: "1,240" },
+    { name: "Computer Science", icon: <FaLaptopCode />, count: "980" },
+    { name: "Engineering", icon: <FaFlask />, count: "1,510" },
+    { name: "Law & Public Policy", icon: <FaBalanceScale />, count: "410" },
+    { name: "Arts & Humanities", icon: <FaPalette />, count: "670" },
+    { name: "Finance & Economics", icon: <FaCoins />, count: "530" },
+];
+
+const PARTNER_UNIVERSITIES = [
+    "Harvard University", "University of Oxford", "MIT", "Stanford University",
+    "University of Toronto", "ETH Zürich", "National University of Singapore",
+    "University of Melbourne", "LSE", "University of Tokyo",
+];
+
+const BENEFITS = [
+    {
+        icon: <FaShieldAlt />,
+        title: "Every listing is verified",
+        desc: "Our team confirms each scholarship directly with the issuing university before it goes live, so you never chase a dead link.",
+    },
+    {
+        icon: <FaRoute />,
+        title: "One dashboard, every stage",
+        desc: "Track deadlines, upload documents, and follow application status across every school you've applied to, in one place.",
+    },
+    {
+        icon: <FaHeadset />,
+        title: "Advisors who reply",
+        desc: "Message a former admissions reviewer when a requirement is unclear — most questions get a real answer within a day.",
+    },
+    {
+        icon: <FaBell />,
+        title: "Deadlines come to you",
+        desc: "Set your fields of interest once and get notified as new scholarships open, weeks before applications typically close.",
+    },
+];
 
 const Home = () => {
     const navigate = useNavigate();
     const [topScholarships, setTopScholarships] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [email, setEmail] = useState("");
+    const [subscribed, setSubscribed] = useState(false);
     const axiosInstance = useAxios();
 
     useEffect(() => {
         const fetchScholarships = async () => {
             try {
                 const response = await axiosInstance.get("/scholarships");
-                // Sort by rank and take top 6
                 const sorted = response.data.sort((a, b) => a.universityWorldRank - b.universityWorldRank);
                 setTopScholarships(sorted.slice(0, 6));
             } catch (err) {
@@ -32,110 +77,189 @@ const Home = () => {
         fetchScholarships();
     }, [axiosInstance]);
 
+    const handleSubscribe = (e) => {
+        e.preventDefault();
+        if (!email) return;
+        setSubscribed(true);
+    };
+
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
+        <div className="min-h-screen bg-[#FAF9F5] text-[#1A1A1A] overflow-x-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+                .font-display { font-family: 'Fraunces', serif; }
+                @keyframes marquee {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                }
+                .marquee-track {
+                    animation: marquee 32s linear infinite;
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    .marquee-track { animation: none; }
+                }
+            `}</style>
 
             {/* --- HERO SECTION --- */}
-            <div className="relative bg-indigo-900 overflow-hidden">
-                {/* Decorative Blobs */}
-                <div className="absolute top-0 -left-20 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-                <div className="absolute bottom-0 -right-20 w-96 h-96 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+            <div className="relative bg-[#0F1B3C]">
+                <div
+                    className="absolute inset-0 opacity-[0.06]"
+                    style={{
+                        backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+                        backgroundSize: "48px 48px",
+                    }}
+                ></div>
 
-                <div className="max-w-7xl mx-auto px-6 py-24 lg:py-32 relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="max-w-7xl mx-auto px-6 py-24 lg:py-28 relative z-10">
+                    <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
                         <motion.div
-                            initial={{ opacity: 0, x: -50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8 }}
+                            initial={{ opacity: 0, y: 24 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, ease: "easeOut" }}
                         >
-                            <span className="inline-block py-1 px-3 rounded-full bg-indigo-500/20 text-indigo-300 text-sm font-medium mb-4 border border-indigo-500/30">
-                                🚀 New: 50+ Ivy League Scholarships Added
-                            </span>
-                            <h1 className="text-5xl lg:text-7xl font-extrabold text-white leading-tight">
-                                Your Future <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-emerald-300">Unlocks</span> Here.
-                            </h1>
-                            <p className="text-xl text-indigo-100 mt-6 max-w-lg opacity-80">
-                                SwiftLaunch is the world's most intuitive scholarship engine. Apply to top-tier universities with zero friction.
+                            <p className="text-[#E8C766] font-medium tracking-wide mb-5">
+                                12,000+ funded places across 450 universities
                             </p>
-                            <div className="mt-10 flex flex-wrap gap-4">
+                            <h1 className="font-display text-5xl lg:text-6xl font-semibold text-white leading-[1.1]">
+                                Find the scholarship your application actually qualifies for.
+                            </h1>
+                            <p className="text-lg text-slate-300 mt-6 max-w-lg leading-relaxed">
+                                SwiftLaunch matches your grades, field, and country of residence against verified
+                                scholarships — so you spend your time writing essays, not searching spreadsheets.
+                            </p>
+                            <div className="mt-10 flex flex-wrap items-center gap-5">
                                 <button
                                     onClick={() => navigate('/all-scholarships?focus=true')}
-                                    className="px-8 py-4 bg-white text-indigo-900 rounded-xl font-bold shadow-xl hover:scale-105 transition-transform"
+                                    className="px-8 py-4 bg-[#E8C766] text-[#0F1B3C] rounded-lg font-semibold hover:bg-white transition-colors"
                                 >
-                                    Explore Scholarships
+                                    Explore scholarships
                                 </button>
-                                <button className="px-8 py-4 bg-indigo-800/50 text-white border border-indigo-400/30 rounded-xl font-bold backdrop-blur-sm hover:bg-indigo-800/80 transition-all">
-                                    Watch How it Works
+                                <button className="flex items-center gap-2 text-white font-medium border-b border-white/30 pb-1 hover:border-white transition-colors">
+                                    See how matching works <FaArrowRight className="text-sm" />
                                 </button>
                             </div>
                         </motion.div>
 
                         <motion.div
                             className="hidden lg:block relative"
-                            initial={{ opacity: 0, scale: 0.8 }}
+                            initial={{ opacity: 0, scale: 0.94 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 1 }}
+                            transition={{ duration: 0.8, delay: 0.15 }}
                         >
-                            <div className="bg-gradient-to-br from-indigo-500/20 to-purple-500/20 p-8 rounded-3xl border border-white/10 backdrop-blur-md">
-                                <img src="https://illustrations.popsy.co/white/student-going-to-school.svg" alt="Education" className="w-full h-auto" />
+                            <div className="bg-white/[0.04] p-10 rounded-2xl border border-white/10">
+                                <div className="flex items-center justify-between mb-6">
+                                    <span className="text-white font-display text-lg">Your match score</span>
+                                    <span className="text-[#E8C766] font-display text-3xl font-semibold">92%</span>
+                                </div>
+                                <div className="space-y-4">
+                                    {["Academic profile", "Field alignment", "Country eligibility"].map((row, i) => (
+                                        <div key={i}>
+                                            <div className="flex justify-between text-sm text-slate-300 mb-1.5">
+                                                <span>{row}</span>
+                                            </div>
+                                            <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full bg-[#E8C766] rounded-full"
+                                                    style={{ width: `${[88, 95, 90][i]}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </motion.div>
                     </div>
                 </div>
             </div>
 
+            {/* --- TRUSTED-BY MARQUEE --- */}
+            <div className="bg-white border-b border-slate-100 py-6 overflow-hidden">
+                <p className="text-center text-xs uppercase tracking-widest text-slate-400 mb-4">
+                    Applicants on SwiftLaunch have gone on to study at
+                </p>
+                <div className="flex whitespace-nowrap">
+                    <div className="flex marquee-track gap-14 pr-14">
+                        {[...PARTNER_UNIVERSITIES, ...PARTNER_UNIVERSITIES].map((name, i) => (
+                            <span key={i} className="text-slate-400 font-display text-lg shrink-0">
+                                {name}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
             {/* --- STATS SECTION --- */}
-            <div className="max-w-7xl mx-auto px-6 -mt-12 relative z-20">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="max-w-7xl mx-auto px-6 py-16">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 rounded-xl overflow-hidden">
                     {[
-                        { label: "Active Scholarships", val: "12K+", icon: <FaGraduationCap /> },
-                        { label: "Universities", val: "450+", icon: <FaGlobeAmericas /> },
-                        { label: "Total Funding", val: "$85M", icon: <FaAward /> },
-                        { label: "Success Rate", val: "94%", icon: <FaCheckCircle /> },
+                        { label: "Active scholarships", val: "12K+", icon: <FaGraduationCap /> },
+                        { label: "Partner universities", val: "450+", icon: <FaGlobeAmericas /> },
+                        { label: "Funding awarded", val: "$85M", icon: <FaAward /> },
+                        { label: "Application success", val: "94%", icon: <FaCheckCircle /> },
                     ].map((stat, i) => (
-                        <div key={i} className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 text-center">
-                            <div className="text-indigo-600 text-2xl flex justify-center mb-2">{stat.icon}</div>
-                            <div className="text-3xl font-bold text-slate-800">{stat.val}</div>
-                            <div className="text-sm text-slate-500">{stat.label}</div>
+                        <div key={i} className="bg-white p-8 text-center">
+                            <div className="text-[#C9A227] text-xl flex justify-center mb-3">{stat.icon}</div>
+                            <div className="font-display text-3xl font-semibold text-[#0F1B3C]">{stat.val}</div>
+                            <div className="text-sm text-slate-500 mt-1">{stat.label}</div>
                         </div>
                     ))}
                 </div>
             </div>
 
+            {/* --- FIELDS OF STUDY --- */}
+            <div className="max-w-7xl mx-auto px-6 py-8">
+                <div className="mb-10">
+                    <h2 className="font-display text-3xl font-semibold text-[#0F1B3C]">Browse by field</h2>
+                    <p className="text-slate-500 mt-2">Start from what you study, not a keyword search.</p>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    {FIELDS.map((field, i) => (
+                        <button
+                            key={i}
+                            onClick={() => navigate(`/all-scholarships?field=${encodeURIComponent(field.name)}`)}
+                            className="text-left p-5 bg-white rounded-xl border border-slate-200 hover:border-[#C9A227] hover:shadow-md transition-all"
+                        >
+                            <div className="text-[#0F1B3C] text-xl mb-4">{field.icon}</div>
+                            <div className="font-semibold text-sm leading-snug">{field.name}</div>
+                            <div className="text-xs text-slate-400 mt-1">{field.count} open</div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             {/* --- TOP SCHOLARSHIPS --- */}
-            <div className="max-w-7xl mx-auto px-6 mt-24">
+            <div className="max-w-7xl mx-auto px-6 mt-20">
                 <div className="flex items-end justify-between mb-12">
                     <div>
-                        <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Top Opportunities</h2>
-                        <p className="text-slate-500 mt-2">Handpicked scholarships from world-renowned institutions.</p>
+                        <h2 className="font-display text-3xl font-semibold text-[#0F1B3C]">Top opportunities this month</h2>
+                        <p className="text-slate-500 mt-2">Ranked by the world standing of the awarding university.</p>
                     </div>
-                    <Link to="/all-scholarships" className="hidden sm:block group text-indigo-600 font-semibold">
-                        View All <span className="group-hover:pl-2 transition-all">→</span>
+                    <Link to="/all-scholarships" className="hidden sm:flex items-center gap-2 text-[#0F1B3C] font-semibold hover:text-[#C9A227] transition-colors">
+                        View all <FaArrowRight className="text-sm" />
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {loading ?
                         Array.from({ length: 6 }).map((_, i) => (
-                            <div key={i} className="h-64 bg-gray-200 animate-pulse rounded-2xl" />
+                            <div key={i} className="h-64 bg-slate-100 animate-pulse rounded-xl" />
                         )) :
                         topScholarships.map((s) => (
-                            <motion.div
+                            <div
                                 key={s._id}
-                                whileHover={{ y: -10 }}
-                                className="group relative p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-300"
+                                className="group relative p-6 bg-white rounded-xl border border-slate-200 hover:border-[#C9A227] hover:shadow-lg transition-all duration-200"
                             >
-                                <div className="absolute top-4 right-4 bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full">
+                                <div className="absolute top-6 right-6 bg-[#0F1B3C]/5 text-[#0F1B3C] text-xs font-semibold px-2.5 py-1 rounded-full">
                                     Rank #{s.universityWorldRank}
                                 </div>
-                                <h3 className="font-bold text-xl mb-1 group-hover:text-indigo-600 transition-colors">{s.scholarshipName}</h3>
-                                <p className="text-slate-500 flex items-center gap-2 mb-6">
+                                <h3 className="font-display font-semibold text-xl mb-1 pr-16">{s.scholarshipName}</h3>
+                                <p className="text-slate-500 flex items-center gap-2 mb-6 text-sm">
                                     <FaGlobeAmericas className="text-xs" /> {s.universityName}
                                 </p>
 
-                                <div className="space-y-2 py-4 border-t border-slate-50">
+                                <div className="space-y-2 py-4 border-t border-slate-100">
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-slate-400">Application Fee</span>
+                                        <span className="text-slate-400">Application fee</span>
                                         <span className="font-semibold">{s.applicationFees ? `$${s.applicationFees}` : "Free"}</span>
                                     </div>
                                     <div className="flex justify-between text-sm">
@@ -144,34 +268,51 @@ const Home = () => {
                                     </div>
                                 </div>
 
-                                <Link to={`/scholarships/${s._id}`} className="block w-full text-center mt-4 py-3 bg-slate-900 text-white rounded-xl font-medium group-hover:bg-indigo-600 transition-colors">
-                                    View Details
+                                <Link to={`/scholarships/${s._id}`} className="block w-full text-center mt-4 py-3 bg-[#0F1B3C] text-white rounded-lg font-medium group-hover:bg-[#C9A227] group-hover:text-[#0F1B3C] transition-colors">
+                                    View details
                                 </Link>
-                            </motion.div>
+                            </div>
                         ))
                     }
                 </div>
             </div>
 
+            {/* --- WHY CHOOSE US --- */}
+            <div className="max-w-7xl mx-auto px-6 mt-28">
+                <div className="mb-12 max-w-xl">
+                    <h2 className="font-display text-3xl font-semibold text-[#0F1B3C]">Built for the parts of this process that waste your time</h2>
+                </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {BENEFITS.map((b, i) => (
+                        <div key={i} className="p-6 bg-white rounded-xl border border-slate-200">
+                            <div className="text-[#C9A227] text-2xl mb-5">{b.icon}</div>
+                            <h3 className="font-semibold text-lg mb-2">{b.title}</h3>
+                            <p className="text-slate-500 text-sm leading-relaxed">{b.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             {/* --- HOW IT WORKS SECTION --- */}
-            <div className="bg-slate-900 mt-32 py-24 text-white">
+            <div className="bg-[#0F1B3C] mt-28 py-24 text-white">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold">Launch Your Journey in 3 Steps</h2>
+                    <div className="mb-16 max-w-xl">
+                        <h2 className="font-display text-3xl font-semibold">Three steps from search to submission</h2>
                     </div>
                     <div className="grid md:grid-cols-3 gap-12">
                         {[
-                            { title: "Find", desc: "Use our smart filters to find the perfect match.", icon: <FaSearch /> },
-                            { title: "Prepare", desc: "Organize your documents with our checklist.", icon: <FaFileAlt /> },
-                            { title: "Apply", desc: "Submit directly through our secure portal.", icon: <FaCheckCircle /> },
+                            { n: "01", title: "Find", desc: "Filter by field, country, and eligibility to see only scholarships you can actually apply for.", icon: <FaSearch /> },
+                            { n: "02", title: "Prepare", desc: "Work through a checklist built from the university's own requirements, document by document.", icon: <FaFileAlt /> },
+                            { n: "03", title: "Apply", desc: "Submit through our secure portal and track your status without emailing the admissions office.", icon: <FaCheckCircle /> },
                         ].map((step, i) => (
-                            <div key={i} className="relative text-center group">
-                                <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 rotate-3 group-hover:rotate-12 transition-transform">
-                                    {step.icon}
+                            <div key={i} className="relative">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <span className="font-display text-[#C9A227] text-lg">{step.n}</span>
+                                    <div className="h-px flex-1 bg-white/15"></div>
+                                    <span className="text-white/70">{step.icon}</span>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
-                                <p className="text-slate-400 leading-relaxed">{step.desc}</p>
-                                {i < 2 && <div className="hidden lg:block absolute top-8 -right-4 w-1/2 border-t-2 border-dashed border-slate-700"></div>}
+                                <h3 className="font-display text-2xl font-semibold mb-3">{step.title}</h3>
+                                <p className="text-slate-300 leading-relaxed text-sm">{step.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -181,75 +322,106 @@ const Home = () => {
             {/* --- SUCCESS STORIES --- */}
             <div className="py-24 bg-white">
                 <div className="max-w-7xl mx-auto px-6">
-                    <h2 className="text-3xl font-bold text-center mb-16">Stories from the Community</h2>
+                    <h2 className="font-display text-3xl font-semibold text-center mb-16 text-[#0F1B3C]">Stories from the community</h2>
                     <Swiper
                         effect={'coverflow'}
                         grabCursor={true}
                         centeredSlides={true}
                         slidesPerView={'auto'}
                         coverflowEffect={{ rotate: 0, stretch: 0, depth: 100, modifier: 2.5, slideShadows: false }}
-                        autoplay={{ delay: 3000 }}
+                        autoplay={{ delay: 3500 }}
                         pagination={{ clickable: true }}
                         modules={[EffectCoverflow, Autoplay, Pagination]}
                         className="pb-12"
                     >
                         <SwiperSlide className="max-w-md">
-                            <div className="p-8 bg-indigo-50 rounded-3xl border border-indigo-100 shadow-sm italic text-lg leading-relaxed text-indigo-900">
-                                “ScholarStream made everything simple — from finding the right opportunity to understand the requirements. This scholarship genuinely changed my life.”
-                                <div className="mt-6 not-italic font-bold flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-indigo-200 rounded-full"></div>
-                                    <span>Ayesha - MIT Scholar</span>
-                                </div>
-                            </div>
-                        </SwiperSlide><SwiperSlide className="max-w-md">
-                            <div className="p-8 bg-green-50 rounded-3xl border border-green-100 shadow-sm italic text-lg leading-relaxed text-green-900">
-                                “What I loved most about ScholarStream was how easy everything felt.
-                                No confusing steps, no hidden information — just clear guidance from start to finish.
-                                I applied confidently, knowing exactly what was required.”
-                                <div className="mt-6 not-italic font-bold flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-green-200 rounded-full"></div>
-                                    <span>Shathi - MIT Scholar</span>
-                                </div>
-                            </div>
-                        </SwiperSlide><SwiperSlide className="max-w-md">
-                            <div className="p-8 bg-yellow-50 rounded-3xl border border-yellow-100 shadow-sm italic text-lg leading-relaxed text-yellow-900">
-                                “Through ScholarStream, I discovered scholarships that actually matched my background and qualifications.
-                                The application process was transparent, and stress-free.”
-                                <div className="mt-6 not-italic font-bold flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-yellow-200 rounded-full"></div>
-                                    <span>Amena - Harvard Student</span>
-                                </div>
-                            </div>
-                        </SwiperSlide><SwiperSlide className="max-w-md">
-                            <div className="p-8 bg-red-50 rounded-3xl border border-red-100 shadow-sm italic text-lg leading-relaxed text-red-900">
-                                “Before finding this scholarship, I almost gave up on studying abroad.
-                                ScholarStream made everything simple — from finding the right opportunity to understanding the requirements.
-                                <div className="mt-6 not-italic font-bold flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-red-200 rounded-full"></div>
-                                    <span>Rafi - MIT Student</span>
+                            <div className="p-8 bg-[#FAF6EA] rounded-2xl border border-[#E8C766]/30 leading-relaxed text-[#0F1B3C]">
+                                <p>"SwiftLaunch made everything simple — from finding the right opportunity to understanding the requirements. This scholarship genuinely changed my life."</p>
+                                <div className="mt-6 font-semibold flex items-center gap-4">
+                                    <div className="w-11 h-11 bg-[#E8C766]/40 rounded-full"></div>
+                                    <span>Ayesha — MIT Scholar</span>
                                 </div>
                             </div>
                         </SwiperSlide>
-                        {/* Add more SwiperSlides as needed */}
+                        <SwiperSlide className="max-w-md">
+                            <div className="p-8 bg-[#EEF3F1] rounded-2xl border border-[#1F6F6B]/20 leading-relaxed text-[#0F1B3C]">
+                                <p>"What I loved most was how easy everything felt. No confusing steps, no hidden information — just clear guidance from start to finish. I applied confidently, knowing exactly what was required."</p>
+                                <div className="mt-6 font-semibold flex items-center gap-4">
+                                    <div className="w-11 h-11 bg-[#1F6F6B]/20 rounded-full"></div>
+                                    <span>Shathi — MIT Scholar</span>
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide className="max-w-md">
+                            <div className="p-8 bg-[#F5F0FA] rounded-2xl border border-slate-200 leading-relaxed text-[#0F1B3C]">
+                                <p>"I discovered scholarships that actually matched my background and qualifications. The application process was transparent and stress-free from day one."</p>
+                                <div className="mt-6 font-semibold flex items-center gap-4">
+                                    <div className="w-11 h-11 bg-slate-200 rounded-full"></div>
+                                    <span>Amena — Harvard Student</span>
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide className="max-w-md">
+                            <div className="p-8 bg-[#FBEFEF] rounded-2xl border border-slate-200 leading-relaxed text-[#0F1B3C]">
+                                <p>"Before finding this scholarship, I had nearly given up on studying abroad. SwiftLaunch made everything simple, from finding the right opportunity to understanding exactly what it required."</p>
+                                <div className="mt-6 font-semibold flex items-center gap-4">
+                                    <div className="w-11 h-11 bg-slate-200 rounded-full"></div>
+                                    <span>Rafi — MIT Student</span>
+                                </div>
+                            </div>
+                        </SwiperSlide>
                     </Swiper>
                 </div>
             </div>
 
+            {/* --- NEWSLETTER / ALERTS --- */}
+            <div className="max-w-5xl mx-auto px-6 my-24">
+                <div className="bg-[#0F1B3C] rounded-2xl p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="max-w-md">
+                        <h2 className="font-display text-2xl md:text-3xl font-semibold text-white mb-2">Get new scholarships before they fill up</h2>
+                        <p className="text-slate-300 text-sm">One email a week, matched to the fields and countries you care about. Unsubscribe any time.</p>
+                    </div>
+                    {subscribed ? (
+                        <div className="flex items-center gap-3 text-[#E8C766] font-medium shrink-0">
+                            <FaCheckCircle /> You're on the list — check your inbox.
+                        </div>
+                    ) : (
+                        <form onSubmit={handleSubscribe} className="flex w-full md:w-auto gap-3 shrink-0">
+                            <input
+                                type="email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="you@email.com"
+                                className="flex-1 md:w-64 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-slate-400 focus:outline-none focus:border-[#E8C766]"
+                            />
+                            <button
+                                type="submit"
+                                className="px-6 py-3 bg-[#E8C766] text-[#0F1B3C] rounded-lg font-semibold hover:bg-white transition-colors shrink-0"
+                            >
+                                Notify me
+                            </button>
+                        </form>
+                    )}
+                </div>
+            </div>
+
             {/* --- FAQ SECTION --- */}
-            <div className="max-w-4xl mx-auto px-6 mb-32">
-                <h2 className="text-3xl font-bold text-center mb-12">Common Questions</h2>
-                <div className="space-y-4">
+            <div className="max-w-4xl mx-auto px-6 mb-28">
+                <h2 className="font-display text-3xl font-semibold text-center mb-12 text-[#0F1B3C]">Common questions</h2>
+                <div className="space-y-3">
                     {[
                         { q: "How do I apply?", a: "Find your scholarship, click 'Apply', and follow our step-by-step guided portal." },
-                        { q: "Who can post scholarships?", a: "Verified universities and educational foundations only." },
-                        { q: "Are there hidden fees?", a: "No. SwiftLaunch is transparent about all application fees upfront." }
+                        { q: "Who can post scholarships?", a: "Verified universities and educational foundations only — every listing is checked before it goes live." },
+                        { q: "Are there hidden fees?", a: "No. SwiftLaunch is transparent about all application fees upfront, and most listings charge none at all." },
+                        { q: "Can I apply from any country?", a: "Eligibility is set by each university, not by us. Every listing states exactly which countries and academic levels qualify." },
                     ].map((item, i) => (
-                        <details key={i} className="group border border-slate-200 rounded-2xl overflow-hidden transition-all">
+                        <details key={i} className="group border border-slate-200 rounded-xl overflow-hidden">
                             <summary className="list-none flex justify-between items-center p-6 cursor-pointer font-semibold bg-white hover:bg-slate-50">
                                 {item.q}
-                                <span className="group-open:rotate-180 transition-transform">↓</span>
+                                <span className="text-slate-400 group-open:rotate-180 transition-transform">↓</span>
                             </summary>
-                            <div className="p-6 pt-0 bg-white text-slate-600">
+                            <div className="p-6 pt-0 bg-white text-slate-600 text-sm leading-relaxed">
                                 {item.a}
                             </div>
                         </details>
