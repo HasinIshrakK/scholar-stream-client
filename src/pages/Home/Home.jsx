@@ -11,7 +11,7 @@ import { Autoplay, EffectCoverflow, Pagination } from 'swiper/modules';
 import {
     FaGraduationCap, FaGlobeAmericas, FaAward, FaSearch, FaFileAlt, FaCheckCircle,
     FaUserTie, FaLaptopCode, FaFlask, FaBalanceScale, FaPalette, FaCoins,
-    FaShieldAlt, FaHeadset, FaRoute, FaBell, FaArrowRight
+    FaShieldAlt, FaHeadset, FaRoute, FaBell, FaArrowRight, FaTimes, FaTools
 } from 'react-icons/fa';
 
 // Fields students commonly search scholarships for. Counts are illustrative
@@ -60,7 +60,17 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
     const [email, setEmail] = useState("");
     const [subscribed, setSubscribed] = useState(false);
+    const [showMatchingModal, setShowMatchingModal] = useState(false);
     const axiosInstance = useAxios();
+
+    useEffect(() => {
+        if (!showMatchingModal) return;
+        const onKeyDown = (e) => {
+            if (e.key === "Escape") setShowMatchingModal(false);
+        };
+        document.addEventListener("keydown", onKeyDown);
+        return () => document.removeEventListener("keydown", onKeyDown);
+    }, [showMatchingModal]);
 
     useEffect(() => {
         const fetchScholarships = async () => {
@@ -81,6 +91,11 @@ const Home = () => {
         e.preventDefault();
         if (!email) return;
         setSubscribed(true);
+    };
+
+    const scrollToAlerts = () => {
+        setShowMatchingModal(false);
+        document.getElementById('scholarship-alerts')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
 
     return (
@@ -134,7 +149,10 @@ const Home = () => {
                                 >
                                     Explore scholarships
                                 </button>
-                                <button className="flex items-center gap-2 text-white font-medium border-b border-white/30 pb-1 hover:border-white transition-colors">
+                                <button
+                                    onClick={() => setShowMatchingModal(true)}
+                                    className="flex items-center gap-2 text-white font-medium border-b border-white/30 pb-1 hover:border-white transition-colors"
+                                >
                                     See how matching works <FaArrowRight className="text-sm" />
                                 </button>
                             </div>
@@ -375,7 +393,7 @@ const Home = () => {
             </div>
 
             {/* --- NEWSLETTER / ALERTS --- */}
-            <div className="max-w-5xl mx-auto px-6 my-24">
+            <div id="scholarship-alerts" className="max-w-5xl mx-auto px-6 my-24 scroll-mt-24">
                 <div className="bg-[#0F1B3C] rounded-2xl p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="max-w-md">
                         <h2 className="font-display text-2xl md:text-3xl font-semibold text-white mb-2">Get new scholarships before they fill up</h2>
@@ -428,6 +446,71 @@ const Home = () => {
                     ))}
                 </div>
             </div>
+
+            {/* --- MATCHING EXPLAINER MODAL --- */}
+            {showMatchingModal && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="matching-modal-title"
+                    onClick={() => setShowMatchingModal(false)}
+                >
+                    <div className="absolute inset-0 bg-[#0F1B3C]/70 backdrop-blur-sm"></div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="relative bg-white rounded-2xl max-w-lg w-full p-8 md:p-10"
+                    >
+                        <button
+                            onClick={() => setShowMatchingModal(false)}
+                            aria-label="Close"
+                            className="absolute top-5 right-5 text-slate-400 hover:text-slate-700 transition-colors"
+                        >
+                            <FaTimes />
+                        </button>
+
+                        <div className="w-11 h-11 rounded-full bg-[#0F1B3C]/5 text-[#0F1B3C] flex items-center justify-center text-lg mb-6">
+                            <FaTools />
+                        </div>
+
+                        <h3 id="matching-modal-title" className="font-display text-2xl font-semibold text-[#0F1B3C] mb-3">
+                            Personalized matching isn't live yet
+                        </h3>
+                        <p className="text-slate-600 leading-relaxed mb-4">
+                            We're building a matching model that will score scholarships against your grades,
+                            field, and country of residence, similar to the preview above. It's still in
+                            development, so nothing is scored automatically today.
+                        </p>
+                        <p className="text-slate-600 leading-relaxed mb-8">
+                            In the meantime, the fastest way to find something you qualify for is to browse by
+                            field or use the filters on the scholarships page — every listing already states its
+                            own eligibility rules.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <button
+                                onClick={() => {
+                                    setShowMatchingModal(false);
+                                    navigate('/all-scholarships');
+                                }}
+                                className="flex-1 px-5 py-3 bg-[#0F1B3C] text-white rounded-lg font-semibold hover:bg-[#16234F] transition-colors"
+                            >
+                                Browse scholarships now
+                            </button>
+                            <button
+                                onClick={scrollToAlerts}
+                                className="flex-1 px-5 py-3 border border-slate-200 text-[#0F1B3C] rounded-lg font-semibold hover:border-[#C9A227] transition-colors"
+                            >
+                                Get notified when it's ready
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
         </div>
     );
 };
