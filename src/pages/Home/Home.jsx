@@ -411,11 +411,11 @@ const Home = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="you@email.com"
-                                className="flex-1 md:w-64 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-slate-400 focus:outline-none focus:border-[#E8C766]"
+                                className="w-30 sm:w-36 lg:w-64 md:w-48 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-slate-400 focus:outline-none focus:border-[#E8C766]"
                             />
                             <button
                                 type="submit"
-                                className="px-6 py-3 bg-[#E8C766] text-[#0F1B3C] rounded-lg font-semibold hover:bg-white transition-colors shrink-0"
+                                className="px-3 sm:px-4 lg:px-6 py-3 bg-[#E8C766] text-[#0F1B3C] rounded-lg font-semibold hover:bg-white transition-colors shrink-0"
                             >
                                 Notify me
                             </button>
